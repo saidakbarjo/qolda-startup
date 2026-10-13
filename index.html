@@ -1,0 +1,1788 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Qoʻlda — kundalik mikro-ishlarni yaqin atrofdagi odamlar bilan tez va ishonchli hal qiluvchi platforma.">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+</head>
+<body>
+<title>Qoʻlda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout concept: a neighbourhood map — dark teal "night city" bands carry the product, mint-tinted paper bands carry the argument; the phone is the hero object. */
+:root{
+  --ink:#052826;
+  --teal:#0b4f4a;
+  --teal-2:#10685f;
+  --mint:#22c79e;
+  --mint-deep:#0f9f7c;
+  --mint-soft:#d3f4e8;
+  --paper:#f1f6f3;
+  --paper-2:#e3ece8;
+  --white:#ffffff;
+  --text:#0c2320;
+  --muted:#4d6964;
+  --on-dark:#e8f6f1;
+  --on-dark-muted:#93bdb3;
+  --line:rgba(12,35,32,.12);
+  --line-dark:rgba(232,246,241,.12);
+  --sun:#ffc45c;
+  --danger:#e8735a;
+  --f-display:"Lora", "Georgia", "Times New Roman", serif;
+  --f-body:"Onest", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r-lg:28px; --r-md:18px; --r-sm:12px;
+  --wrap:1200px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--text);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:24px}
+@media (max-width:480px){.wrap{padding-inline:18px}}
+.eyebrow{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mint-deep);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1.5px;background:currentColor}
+.dark .eyebrow{color:var(--mint)}
+.dark{background:var(--ink);color:var(--on-dark)}
+.sec{padding-block:clamp(72px,10vw,128px)}
+.sec-head{display:grid;gap:18px;max-width:760px;margin-bottom:clamp(40px,6vw,64px)}
+.sec-head h2{font-size:clamp(34px,5vw,56px)}
+.sec-head p{font-size:19px;color:var(--muted);max-width:60ch}
+.dark .sec-head p{color:var(--on-dark-muted)}
+.ico{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;transition:transform .2s ease, background .2s ease, box-shadow .2s ease;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn-mint{background:var(--mint);color:var(--ink);box-shadow:0 10px 30px -10px rgba(34,199,158,.7)}
+.btn-mint:hover{background:#3ad6ae}
+.btn-ghost{background:transparent;color:var(--on-dark);box-shadow:inset 0 0 0 1.5px var(--line-dark)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--on-dark-muted)}
+.btn-ink{background:var(--ink);color:var(--on-dark)}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(5,40,38,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line-dark);color:var(--on-dark)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:72px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:25px;letter-spacing:-.02em}
+.logo-mark{width:34px;height:34px;border-radius:11px;background:var(--mint);display:grid;place-items:center;color:var(--ink)}
+.logo-mark svg{width:20px;height:20px}
+.nav-links{display:flex;gap:26px;margin-left:auto}
+.nav-links a{text-decoration:none;font-size:15px;color:var(--on-dark-muted);transition:color .2s}
+.nav-links a:hover{color:var(--on-dark)}
+.lang{display:flex;padding:3px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line-dark)}
+.lang button{background:none;border:0;color:var(--on-dark-muted);font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;padding:6px 11px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--on-dark);color:var(--ink)}
+.nav .btn{padding:11px 18px;font-size:15px}
+@media (max-width:960px){.nav-links{display:none}.lang{margin-left:auto}}
+@media (max-width:520px){.nav .btn{display:none}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(48px,7vw,96px) clamp(64px,8vw,110px)}
+.hero::before{content:"";position:absolute;inset:-30% -10% auto auto;width:780px;height:780px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,199,158,.20),transparent);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center;position:relative}
+.hero-copy{display:grid;gap:28px;min-width:0}
+.hero h1{font-size:clamp(46px,7.2vw,92px);font-weight:600;letter-spacing:-.025em;line-height:1}
+.hero h1 em{font-style:italic;color:var(--mint);font-weight:500}
+.hero .lead{font-size:clamp(18px,1.6vw,21px);color:var(--on-dark-muted);max-width:52ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:14px;padding:7px 14px;border-radius:999px;background:rgba(232,246,241,.06);box-shadow:inset 0 0 0 1px var(--line-dark);color:var(--on-dark)}
+.hero-facts{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:clamp(20px,4vw,48px);padding-top:26px;border-top:1px solid var(--line-dark)}
+.fact b{display:block;font-family:var(--f-display);font-size:clamp(26px,3vw,34px);font-weight:600;color:var(--on-dark);font-variant-numeric:tabular-nums;line-height:1.1}
+.fact span{font-size:14px;color:var(--on-dark-muted)}
+.fact b{white-space:nowrap}
+@media (max-width:520px){.hero-facts{grid-template-columns:1fr 1fr}.fact:first-child{grid-column:1/-1}}
+
+.stage{position:relative;aspect-ratio:1/1.05;max-width:560px;width:100%;justify-self:end;border-radius:36px;background:linear-gradient(160deg,#0a3d39,#062e2b);box-shadow:inset 0 0 0 1px var(--line-dark),0 40px 80px -40px rgba(0,0,0,.6);overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stage .phone{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-3deg);height:86%;width:auto;max-width:72%}
+.toast{position:absolute;display:flex;gap:12px;align-items:center;background:var(--white);color:var(--text);border-radius:16px;padding:12px 16px 12px 12px;box-shadow:0 24px 50px -20px rgba(0,0,0,.55);font-size:13.5px;line-height:1.35;max-width:250px;animation:float 6s ease-in-out infinite}
+.toast b{display:block;font-size:14px}
+.toast small{color:var(--muted)}
+.toast .av{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;font-weight:700;color:var(--ink)}
+.toast-a{right:4%;top:9%}
+.toast-b{left:4%;bottom:9%;animation-delay:-3s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}.stage{justify-self:center}}
+@media (max-width:480px){.toast-b{display:none}.toast{max-width:200px;font-size:12px;padding:10px 12px 10px 10px}.toast b{font-size:12.5px}.toast .av{width:30px;height:30px}}
+
+/* Phone */
+.phone{aspect-ratio:9/19;background:#0b1514;border-radius:42px;padding:9px;box-shadow:0 0 0 2px #24403c,0 40px 70px -30px rgba(0,0,0,.7)}
+.screen{position:relative;height:100%;border-radius:34px;background:var(--paper);overflow:hidden;color:var(--text);font-size:11.5px;line-height:1.35;display:flex;flex-direction:column}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:34%;height:20px;border-radius:999px;background:#0b1514;z-index:3}
+.app-top{background:var(--teal);color:var(--on-dark);padding:38px 14px 14px;display:grid;gap:8px}
+.app-top .loc{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--on-dark-muted)}
+.app-top .loc svg{width:12px;height:12px}
+.app-top h4{font-family:var(--f-display);font-size:17px;font-weight:600;margin:0;line-height:1.15}
+.search{background:rgba(255,255,255,.1);border-radius:10px;padding:8px 10px;font-size:10.5px;color:var(--on-dark-muted)}
+.feed{padding:10px;display:grid;gap:7px;align-content:start;flex:1}
+.task{background:var(--white);border-radius:12px;padding:9px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px;box-shadow:0 1px 0 var(--line)}
+.task b{font-size:11.5px;font-weight:600}
+.task .pr{font-family:var(--f-mono);font-size:10.5px;color:var(--teal-2);text-align:right;align-self:center;grid-row:span 2}
+.task small{font-size:9.5px;color:var(--muted)}
+.task.hot{box-shadow:inset 0 0 0 1.5px var(--sun)}
+.tag-hot{display:inline-block;font-size:8.5px;font-weight:700;background:var(--sun);color:#4a3200;border-radius:5px;padding:1px 5px;margin-left:4px;vertical-align:1px}
+.tabbar{display:flex;justify-content:space-around;padding:9px 0 14px;background:var(--white);border-top:1px solid var(--line)}
+.tabbar i{width:18px;height:3px;border-radius:2px;background:var(--paper-2)}
+.tabbar i:first-child{background:var(--mint)}
+
+/* Marquee */
+.marquee{background:var(--mint);color:var(--ink);overflow:hidden;padding-block:18px}
+.marquee-track{display:flex;gap:44px;width:max-content;animation:scroll 38s linear infinite;font-family:var(--f-display);font-size:clamp(20px,2.4vw,28px);font-weight:600;font-style:italic;white-space:nowrap}
+.marquee-track span{display:inline-flex;align-items:center;gap:44px}
+.marquee-track span::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--ink)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* Problem */
+.problems{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line)}
+.problem{padding:34px 32px 8px 0;display:grid;gap:14px;align-content:start;min-width:0}
+.problem + .problem{padding-left:32px;border-left:1px solid var(--line)}
+.problem .num{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.problem h3{font-size:26px}
+.problem p{color:var(--muted)}
+.problem .ico{width:30px;height:30px;color:var(--danger)}
+@media (max-width:860px){.problems{grid-template-columns:1fr}.problem,.problem + .problem{padding:28px 0;border-left:0;border-bottom:1px solid var(--line)}}
+
+.quote-band{margin-top:clamp(56px,7vw,88px);display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--white);border-radius:var(--r-lg);padding:clamp(26px,4vw,44px)}
+.quote-band .big{font-family:var(--f-display);font-size:clamp(46px,6vw,76px);font-weight:600;color:var(--teal);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.quote-band p{font-size:clamp(18px,1.8vw,22px);font-family:var(--f-display);line-height:1.4;max-width:46ch;min-width:0}
+@media (max-width:700px){.quote-band{grid-template-columns:1fr}.quote-band .big{white-space:normal}}
+
+/* How it works */
+.how{display:grid;grid-template-columns:1fr 360px;gap:clamp(40px,6vw,96px);align-items:center}
+.steps{display:grid;gap:10px;list-style:none;margin:0;padding:0}
+.step{display:grid;grid-template-columns:56px 1fr;gap:18px;align-items:start;padding:20px 22px;border-radius:var(--r-md);cursor:pointer;transition:background .25s;position:relative;text-align:left;background:none;border:0;color:inherit;width:100%}
+.step:hover{background:rgba(232,246,241,.04)}
+.step[aria-selected="true"]{background:rgba(232,246,241,.07)}
+.step .n{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-size:22px;font-weight:600;box-shadow:inset 0 0 0 1.5px var(--line-dark);color:var(--on-dark-muted);transition:all .25s}
+.step[aria-selected="true"] .n{background:var(--mint);color:var(--ink);box-shadow:none}
+.step h3{font-size:24px;margin-bottom:6px;color:var(--on-dark)}
+.step p{color:var(--on-dark-muted);font-size:16px}
+.step .bar{position:absolute;left:22px;right:22px;bottom:0;height:2px;background:var(--line-dark);border-radius:2px;overflow:hidden;opacity:0}
+.step[aria-selected="true"] .bar{opacity:1}
+.step .bar i{display:block;height:100%;width:0;background:var(--mint)}
+.step[aria-selected="true"] .bar i{animation:fill 5s linear forwards}
+.paused .step .bar i{animation-play-state:paused}
+@keyframes fill{to{width:100%}}
+.how-phone{width:100%;max-width:300px;justify-self:center}
+.how-phone .screen > section{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .45s ease;pointer-events:none}
+.how-phone .screen > section.on{opacity:1;transform:none}
+.sc-body{padding:12px;display:grid;gap:9px;align-content:start;flex:1}
+.field{background:var(--white);border-radius:11px;padding:9px 11px;display:grid;gap:2px;box-shadow:0 1px 0 var(--line)}
+.field small{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.field b{font-size:12px;font-weight:600}
+.field b.mono{font-family:var(--f-mono);font-weight:500}
+.pills{display:flex;flex-wrap:wrap;gap:5px}
+.pills span{font-size:10px;padding:4px 8px;border-radius:999px;background:var(--white);box-shadow:inset 0 0 0 1px var(--line)}
+.pills span.on{background:var(--teal);color:var(--on-dark);box-shadow:none}
+.app-btn{margin-top:auto;background:var(--mint);color:var(--ink);font-weight:700;text-align:center;border-radius:12px;padding:11px;font-size:12px}
+.offer{background:var(--white);border-radius:12px;padding:9px;display:grid;grid-template-columns:32px 1fr auto;gap:9px;align-items:center;box-shadow:0 1px 0 var(--line)}
+.offer .av{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:12px}
+.offer b{font-size:11.5px}
+.offer small{display:block;color:var(--muted);font-size:9.5px}
+.offer .ok{font-size:10px;font-weight:700;background:var(--mint-soft);color:var(--teal);border-radius:8px;padding:5px 8px}
+.star{color:#c98a00}
+.minimap{height:150px;border-radius:14px;background:#dbe8e2;position:relative;overflow:hidden}
+.minimap svg{position:absolute;inset:0;width:100%;height:100%}
+.eta{display:flex;justify-content:space-between;align-items:center;background:var(--white);border-radius:12px;padding:10px 11px;box-shadow:0 1px 0 var(--line)}
+.eta b{font-family:var(--f-display);font-size:18px}
+.progress{height:6px;background:var(--paper-2);border-radius:6px;overflow:hidden}
+.progress i{display:block;height:100%;width:62%;background:var(--mint);border-radius:6px}
+.receipt{background:var(--white);border-radius:14px;padding:12px;display:grid;gap:7px;box-shadow:0 1px 0 var(--line)}
+.receipt .row{display:flex;justify-content:space-between;font-size:11px}
+.receipt .row span:last-child{font-family:var(--f-mono)}
+.receipt .tot{border-top:1px dashed var(--line);padding-top:7px;font-weight:700}
+.stars{display:flex;gap:4px;justify-content:center;font-size:24px;color:#e6a400;letter-spacing:2px}
+.done{display:grid;place-items:center;gap:6px;text-align:center;padding:8px 0 2px}
+.done .ck{width:44px;height:44px;border-radius:50%;background:var(--mint);display:grid;place-items:center;color:var(--ink)}
+@media (max-width:900px){.how{grid-template-columns:1fr}.how-phone{order:-1;max-width:260px}}
+
+/* Trust */
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pillar{background:var(--white);border-radius:var(--r-lg);padding:30px;display:grid;gap:22px;align-content:start;min-width:0}
+.pillar-top{display:flex;gap:14px;align-items:center}
+.pillar-top .badge{width:48px;height:48px;border-radius:14px;background:var(--mint-soft);color:var(--teal);display:grid;place-items:center}
+.pillar h3{font-size:23px}
+.risk{background:var(--paper);border-radius:var(--r-sm);padding:14px 16px;display:grid;gap:4px}
+.risk small{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--danger)}
+.risk p{font-size:15px;color:var(--muted)}
+.measures{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.measures li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15.5px;line-height:1.45}
+.measures li svg{width:20px;height:20px;color:var(--mint-deep);margin-top:1px}
+.measures-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mint-deep)}
+@media (max-width:960px){.trust{grid-template-columns:1fr}}
+
+.trust-strip{margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ts{display:flex;gap:14px;align-items:center;padding:20px 24px;border-radius:var(--r-md);box-shadow:inset 0 0 0 1px var(--line)}
+.ts .ico{color:var(--teal)}
+.ts b{display:block;font-size:16px}
+.ts span{font-size:14px;color:var(--muted)}
+@media (max-width:860px){.trust-strip{grid-template-columns:1fr}}
+
+/* Pricing / calculator */
+.model{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,5vw,72px);align-items:start}
+.model-points{display:grid;gap:0}
+.mp{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid var(--line-dark);align-items:baseline}
+.mp:first-child{border-top:1px solid var(--line-dark)}
+.mp b{font-family:var(--f-display);font-size:34px;font-weight:600;color:var(--mint);line-height:1}
+.mp h3{font-family:var(--f-body);font-size:18px;font-weight:600;margin-bottom:4px}
+.mp p{color:var(--on-dark-muted);font-size:15.5px}
+@media (max-width:520px){.mp{grid-template-columns:1fr;gap:8px}}
+
+.calc{background:var(--on-dark);color:var(--text);border-radius:var(--r-lg);padding:clamp(24px,3.5vw,40px);display:grid;gap:26px;min-width:0}
+.calc h3{font-size:28px}
+.calc .sub{color:var(--muted);font-size:15px;margin-top:6px}
+.ctl{display:grid;gap:10px}
+.ctl-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ctl label{font-weight:600;font-size:15px}
+.ctl output{font-family:var(--f-mono);font-size:15px;color:var(--teal)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(to right,var(--mint) var(--p,50%),var(--paper-2) var(--p,50%));outline-offset:6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--white);box-shadow:0 0 0 2px var(--teal),0 4px 10px rgba(0,0,0,.2);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--white);border:2px solid var(--teal);cursor:pointer}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{border:0;background:var(--white);box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--text)}
+.presets button:hover{box-shadow:inset 0 0 0 1px var(--teal)}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--white);border-radius:var(--r-sm);padding:14px 16px}
+.toggle b{display:block;font-size:15px}
+.toggle span{font-size:13px;color:var(--muted)}
+.switch{position:relative;width:50px;height:30px;flex:none}
+.switch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.switch i{position:absolute;inset:0;border-radius:999px;background:var(--paper-2);transition:background .2s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--white);box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .2s}
+.switch input:checked + i{background:var(--sun)}
+.switch input:checked + i::after{transform:translateX(20px)}
+.switch input:focus-visible + i{outline:3px solid var(--mint);outline-offset:3px}
+.split{display:grid;gap:12px}
+.split-bar{display:flex;height:14px;border-radius:8px;overflow:hidden;background:var(--paper-2)}
+.split-bar i{display:block;height:100%;transition:width .35s ease}
+.split-bar .a{background:var(--teal)}
+.split-bar .b{background:var(--mint)}
+.split-bar .c{background:var(--sun)}
+.result{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.res{background:var(--white);border-radius:var(--r-sm);padding:14px;display:grid;gap:4px;min-width:0}
+.res small{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.res small::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--dot)}
+.res b{font-family:var(--f-mono);font-weight:500;font-size:clamp(15px,1.5vw,18px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.calc .note{font-size:13px;color:var(--muted)}
+@media (max-width:960px){.model{grid-template-columns:1fr}}
+@media (max-width:560px){.result{grid-template-columns:1fr}}
+
+/* Why now */
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.why-card{padding:28px 24px;border-radius:var(--r-lg);background:var(--white);display:grid;gap:14px;align-content:start;min-width:0}
+.why-card .ico{width:30px;height:30px;color:var(--teal)}
+.why-card h3{font-size:22px}
+.why-card p{color:var(--muted);font-size:15.5px}
+.why-card.feature{background:var(--teal);color:var(--on-dark)}
+.why-card.feature .ico{color:var(--mint)}
+.why-card.feature p{color:var(--on-dark-muted)}
+@media (max-width:1000px){.why{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.why{grid-template-columns:1fr}}
+
+/* Roadmap */
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;list-style:none;margin:0;padding:0}
+.road::before{content:"";position:absolute;left:0;right:0;top:27px;height:2px;background:linear-gradient(to right,var(--mint) 0 18%,var(--line-dark) 18%)}
+.ms{display:grid;gap:14px;padding-right:32px;position:relative;align-content:start;min-width:0}
+.ms .dot{width:56px;height:56px;border-radius:50%;background:var(--ink);box-shadow:inset 0 0 0 2px var(--line-dark);display:grid;place-items:center;font-family:var(--f-display);font-size:22px;font-weight:600;color:var(--on-dark-muted);position:relative}
+.ms.now .dot{background:var(--mint);color:var(--ink);box-shadow:0 0 0 8px rgba(34,199,158,.18)}
+.ms small{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-muted)}
+.ms.now small{color:var(--mint)}
+.ms h3{font-size:28px}
+.ms p{color:var(--on-dark-muted);max-width:32ch}
+.ms .kpi{font-family:var(--f-display);font-size:44px;font-weight:600;color:var(--on-dark);line-height:1}
+@media (max-width:860px){.road{grid-template-columns:1fr;gap:36px}.road::before{left:27px;right:auto;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(to bottom,var(--mint) 0 22%,var(--line-dark) 22%)}.ms{grid-template-columns:56px 1fr;column-gap:20px;padding-right:0}.ms .dot{grid-row:span 4}}
+
+/* Waitlist */
+.join{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+.join-copy{display:grid;gap:22px}
+.join-copy h2{font-size:clamp(36px,5vw,60px)}
+.join-copy p{font-size:19px;color:var(--muted);max-width:46ch}
+.perks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.perks li{display:flex;gap:12px;align-items:center;font-size:16px}
+.perks svg{color:var(--mint-deep);width:22px;height:22px}
+.form{background:var(--white);border-radius:var(--r-lg);padding:clamp(24px,3.5vw,40px);display:grid;gap:18px;box-shadow:0 40px 80px -50px rgba(5,40,38,.45);min-width:0}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;background:var(--paper);border-radius:14px}
+.seg button{border:0;background:none;padding:12px 10px;border-radius:11px;font-weight:600;font-size:15px;cursor:pointer;color:var(--muted);display:grid;gap:2px}
+.seg button small{font-weight:400;font-size:12px}
+.seg button[aria-pressed="true"]{background:var(--white);color:var(--text);box-shadow:0 2px 8px rgba(5,40,38,.12)}
+.fld{display:grid;gap:7px}
+.fld label{font-size:14px;font-weight:600}
+.fld input,.fld select{width:100%;border:0;background:var(--paper);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);box-shadow:inset 0 0 0 1px transparent;transition:box-shadow .2s}
+.fld input:focus,.fld select:focus{outline:none;box-shadow:inset 0 0 0 2px var(--mint)}
+.fld input[aria-invalid="true"]{box-shadow:inset 0 0 0 2px var(--danger)}
+.fld .err{font-size:13px;color:#b9452c}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.form .btn{width:100%;padding:17px}
+.form .fine{font-size:12.5px;color:var(--muted);text-align:center}
+.success{display:grid;gap:14px;justify-items:start;padding:10px 0}
+.success .ck{width:56px;height:56px;border-radius:50%;background:var(--mint);display:grid;place-items:center;color:var(--ink)}
+.success h3{font-size:30px}
+.success p{color:var(--muted)}
+.success button{background:none;border:0;color:var(--teal);font-weight:600;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:4px}
+@media (max-width:900px){.join{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq{max-width:860px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:first-of-type{border-top:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:24px 0;font-family:var(--f-display);font-size:clamp(19px,2vw,23px);font-weight:600}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .pm{width:34px;height:34px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);display:grid;place-items:center;transition:transform .25s, background .25s}
+.faq details[open] summary .pm{transform:rotate(45deg);background:var(--mint);box-shadow:none}
+.faq details p{padding:0 50px 26px 0;color:var(--muted);font-size:17px;max-width:65ch}
+
+/* Footer */
+.foot{padding-block:64px 40px}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid var(--line-dark)}
+.foot-top p{color:var(--on-dark-muted);max-width:36ch;margin-top:16px}
+.foot h4{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-muted);margin:0 0 16px;font-weight:500}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.foot ul a{text-decoration:none;color:var(--on-dark)}
+.foot ul a:hover{color:var(--mint)}
+.foot-bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:28px;font-size:14px;color:var(--on-dark-muted)}
+.wordmark{font-family:var(--f-display);font-weight:600;font-style:italic;font-size:clamp(80px,19vw,260px);line-height:.85;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.2px var(--line-dark);margin-top:40px;user-select:none;white-space:nowrap;overflow:hidden}
+@media (max-width:760px){.foot-top{grid-template-columns:1fr 1fr}.foot-top > div:first-child{grid-column:1/-1}}
+
+/* Announcement, snackbar */
+.ann{background:var(--sun);color:#3d2a00;text-align:center;font-size:14.5px;font-weight:500;padding:10px 16px}
+.snack{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--on-dark);padding:13px 20px;border-radius:12px;z-index:100;font-size:14.5px;box-shadow:0 20px 40px -16px rgba(0,0,0,.5);max-width:calc(100% - 32px)}
+
+/* Form extras */
+.skills{display:flex;flex-wrap:wrap;gap:8px}
+.skills label{position:relative}
+.skills input{position:absolute;opacity:0;width:1px;height:1px}
+.skills span{display:inline-block;padding:8px 13px;border-radius:999px;background:var(--paper);font-size:14px;cursor:pointer;transition:background .15s}
+.skills input:checked + span{background:var(--ink);color:var(--on-dark)}
+.skills input:focus-visible + span{outline:3px solid var(--mint);outline-offset:2px}
+.form-err{background:#fbe1da;color:#8f3520;border-radius:10px;padding:11px 14px;font-size:14px}
+.fld textarea{width:100%;border:0;background:var(--paper);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);resize:vertical;min-height:120px;font-family:inherit}
+.fld textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--mint)}
+.closed{display:grid;gap:12px;padding:12px 0}
+.closed h3{font-size:26px}
+.closed p{color:var(--muted)}
+
+/* Contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:start}
+.contact-copy{display:grid;gap:20px}
+.contact-copy h2{font-size:clamp(32px,4.4vw,52px)}
+.contact-copy p{font-size:18px;color:var(--muted);max-width:44ch}
+.reach{display:grid;gap:10px}
+.reach div{display:flex;gap:12px;align-items:center;font-size:17px}
+.reach svg{color:var(--teal)}
+.reach a{color:var(--teal);font-weight:600}
+@media (max-width:900px){.contact{grid-template-columns:1fr}}
+.foot-reach{margin-top:18px;display:grid;gap:6px;color:var(--on-dark)}
+.foot-reach a{color:var(--mint)}
+
+/* Admin */
+.adm{padding-block:32px 72px;min-height:80vh}
+.adm-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin-bottom:26px}
+.adm-head h1{font-size:clamp(30px,4vw,44px)}
+.adm-head .meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.mode{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;padding:6px 12px;border-radius:999px;background:var(--mint-soft);color:var(--teal)}
+.mode.demo{background:#ffe7b8;color:#6b4a00}
+.adm-shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;align-items:start}
+.adm-side{position:sticky;top:calc(92px + env(safe-area-inset-top,0px));display:grid;gap:4px;background:var(--white);border-radius:var(--r-md);padding:8px}
+.adm-side button{display:flex;justify-content:space-between;align-items:center;gap:10px;border:0;background:none;padding:11px 14px;border-radius:10px;font-weight:500;font-size:15px;color:var(--muted);cursor:pointer;text-align:left;white-space:nowrap}
+.adm-side button:hover{color:var(--text)}
+.adm-side button[aria-selected="true"]{background:var(--ink);color:var(--on-dark)}
+.cnt{font-family:var(--f-mono);font-size:12px;padding:2px 8px;border-radius:999px;background:var(--paper-2);color:var(--text)}
+.adm-side button[aria-selected="true"] .cnt{background:var(--mint);color:var(--ink)}
+.adm-main{min-width:0;display:grid;gap:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi-t{background:var(--white);border-radius:var(--r-md);padding:20px;display:grid;gap:8px;align-content:start;min-width:0}
+.kpi-t small{color:var(--muted);font-size:13.5px}
+.kpi-t b{font-family:var(--f-display);font-size:40px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.kpi-t em{font-style:normal;font-size:13px;color:var(--muted)}
+.meter{height:6px;background:var(--paper-2);border-radius:6px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--mint);border-radius:6px}
+.panel{background:var(--white);border-radius:var(--r-md);padding:22px;display:grid;gap:16px;align-content:start;min-width:0}
+.panel h3{font-size:20px}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.panel-h span{font-size:13px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.chart svg{width:100%;height:auto;display:block}
+.hbars{display:grid;gap:10px}
+.hbar{display:grid;grid-template-columns:minmax(0,130px) 1fr 34px;gap:10px;align-items:center;font-size:14px}
+.hbar > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .t{height:10px;background:var(--paper);border-radius:6px;overflow:hidden}
+.hbar .t i{display:block;height:100%;background:var(--teal);border-radius:6px}
+.hbar > span:last-child{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.st-pills{display:flex;flex-wrap:wrap;gap:8px}
+.recent{display:grid;gap:0}
+.recent div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.recent div:last-child{border-bottom:0}
+.recent small{color:var(--muted);font-family:var(--f-mono);font-size:12px;white-space:nowrap}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar input,.toolbar select{border:0;background:var(--white);box-shadow:inset 0 0 0 1px var(--line);border-radius:10px;padding:11px 12px;font-size:14.5px;color:var(--text)}
+.toolbar input{flex:1;min-width:180px}
+.toolbar .grow{flex:1}
+.btn-sm{padding:11px 16px;font-size:14px}
+.btn-line{background:var(--white);color:var(--text);box-shadow:inset 0 0 0 1px var(--line)}
+.tbl-wrap{overflow-x:auto;background:var(--white);border-radius:var(--r-md)}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
+.tbl th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .mono{font-family:var(--f-mono);font-size:12.5px;white-space:nowrap}
+.tbl .sk{font-size:12.5px;color:var(--muted);max-width:200px}
+.role{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-block}
+.role.client{background:#e3e1fb;color:#3b3486}
+.role.worker{background:var(--mint-soft);color:var(--teal)}
+.st{border:0;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.st-new{background:#ffe7b8;color:#6b4a00}
+.st-contacted{background:#dbe9ff;color:#1f4f99}
+.st-verified{background:var(--mint-soft);color:var(--teal)}
+.st-rejected{background:#fbe1da;color:#8f3520}
+.note-in{width:100%;min-width:170px;border:0;background:var(--paper);border-radius:8px;padding:8px 10px;font-size:13.5px;color:var(--text);font-family:inherit}
+.note-in:focus{outline:none;box-shadow:inset 0 0 0 2px var(--mint)}
+.icon-btn{border:0;background:none;color:var(--muted);cursor:pointer;padding:7px 9px;border-radius:8px;font-size:13px;white-space:nowrap;font-family:inherit}
+.icon-btn:hover{background:var(--paper);color:var(--text)}
+.icon-btn.danger{color:#b9452c}
+.icon-btn.armed{background:#b9452c;color:#fff}
+.empty{padding:48px 20px;text-align:center;color:var(--muted);display:grid;gap:8px;justify-items:center}
+.empty b{color:var(--text);font-family:var(--f-display);font-size:21px;font-weight:600}
+.msgs{display:grid;gap:12px}
+.msg{background:var(--white);border-radius:var(--r-md);padding:18px 20px;display:grid;gap:10px;min-width:0}
+.msg-top{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.msg-top b{font-size:16px}
+.msg-top .mono{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.msg-top .new{font-size:11px;font-weight:700;letter-spacing:.06em;background:var(--mint);color:var(--ink);border-radius:6px;padding:2px 7px}
+.msg p{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text)}
+.msg .acts{display:flex;gap:6px;flex-wrap:wrap}
+.set-form{display:grid;gap:18px}
+.set-form .toggle{background:var(--paper)}
+.set-note{font-size:14px;color:var(--muted);line-height:1.55}
+.set-note code{font-family:var(--f-mono);font-size:12.5px;background:var(--paper);padding:2px 6px;border-radius:5px}
+.gate{max-width:460px;margin:24px auto;background:var(--white);border-radius:var(--r-lg);padding:32px;display:grid;gap:16px}
+.gate h2{font-size:30px}
+.gate p{color:var(--muted)}
+@media (max-width:960px){.adm-shell{grid-template-columns:minmax(0,1fr)}.adm-side{position:static;display:flex;overflow-x:auto}.kpis{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media (max-width:420px){.kpi-t b{font-size:32px}}
+
+/* load-in (from visible resting state) */
+.rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.rise.d1{animation-delay:.08s}.rise.d2{animation-delay:.16s}.rise.d3{animation-delay:.24s}.rise.d4{animation-delay:.32s}
+@keyframes rise{from{transform:translateY(18px);opacity:.001}to{transform:none;opacity:1}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M11.5 2.3a.5.5 0 0 1 1 0l2.3 4.7a2 2 0 0 0 1.5 1.1l5.2.8a.5.5 0 0 1 .3.9l-3.8 3.7a2 2 0 0 0-.6 1.8l.9 5.2a.5.5 0 0 1-.8.6l-4.6-2.5a2 2 0 0 0-1.9 0l-4.6 2.5a.5.5 0 0 1-.8-.6l.9-5.2a2 2 0 0 0-.6-1.8L2.2 9.8a.5.5 0 0 1 .3-.9l5.2-.8a2 2 0 0 0 1.5-1.1z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0v1"/><path d="M14 10V4a2 2 0 0 0-4 0v2"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+</svg>
+
+<div class="ann" id="ann" hidden></div>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Qoʻlda">
+      <span class="logo-mark"><svg class="ico" style="stroke-width:2.2"><use href="#i-hand"/></svg></span>
+      Qoʻlda
+    </a>
+    <nav class="nav-links" aria-label="Asosiy">
+      <a href="#how" data-i="nav1">Qanday ishlaydi</a>
+      <a href="#trust" data-i="nav2">Xavfsizlik</a>
+      <a href="#model" data-i="nav3">Narxlar</a>
+      <a href="#road" data-i="nav4">Reja</a>
+      <a href="#faq" data-i="nav5">Savollar</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Til">
+      <button type="button" id="lang-uz" aria-pressed="true">UZ</button>
+      <button type="button" id="lang-ru" aria-pressed="false">RU</button>
+    </div>
+    <a class="btn btn-mint" href="#join" data-i="navCta">Roʻyxatdan oʻtish</a>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero dark">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow rise" data-i="heroEyebrow">Toshkentda tez kunda</span>
+      <h1 class="rise d1" data-i="heroTitle">Kichik ishlar. <em>Yaqin</em> odamlar. Bir tugma.</h1>
+      <p class="lead rise d2" data-i="heroLead">Qoʻlda — kundalik mikro-ishlarni yaqin atrofdagi odamlar bilan tez va ishonchli hal qiluvchi platforma. Ishni eʼlon qiling, qoʻshningiz bajaradi.</p>
+      <div class="cta-row rise d3">
+        <a class="btn btn-mint" href="#join"><span data-i="heroCta1">Birinchilardan boʻling</span> <svg class="ico" style="width:20px;height:20px"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#join" id="cta-worker" data-i="heroCta2">Ijrochi boʻlib ishlash</a>
+      </div>
+      <div class="chips rise d3">
+        <span class="chip" data-i="cat1">Mebel yigʻish</span>
+        <span class="chip" data-i="cat2">Kichik taʼmirlash</span>
+        <span class="chip" data-i="cat3">Navbatda turish</span>
+        <span class="chip" data-i="cat4">Bogʻ ishlari</span>
+        <span class="chip" data-i="cat5">Rasm osish</span>
+      </div>
+      <div class="hero-facts rise d4">
+        <div class="fact"><b data-i="f1b">30 daq – 2 soat</b><span data-i="f1s">ish bajarilish vaqti</span></div>
+        <div class="fact"><b data-i="f2b">0 soʻm</b><span data-i="f2s">ilovadan foydalanish</span></div>
+        <div class="fact"><b class="goal">500+</b><span data-i="f3s">tekshirilgan ijrochi — maqsad</span></div>
+      </div>
+    </div>
+
+    <div class="stage rise d2" aria-label="Yaqin atrofdagi ijrochilar xaritasi">
+      <canvas id="map"></canvas>
+      <div class="phone" aria-hidden="true">
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="app-top">
+            <div class="loc"><svg class="ico"><use href="#i-pin"/></svg><span data-i="pLoc">Yunusobod, Toshkent</span></div>
+            <h4 data-i="pTitle">Yaqin atrofdagi ishlar</h4>
+            <div class="search" data-i="pSearch">Qanday yordam kerak?</div>
+          </div>
+          <div class="feed">
+            <div class="task"><b data-i="t1">Shkaf yigʻish</b><span class="pr">120 000</span><small data-i="t1s">1,2 km · 1–2 soat</small></div>
+            <div class="task hot"><b><span data-i="t2">Navbatda turish</span><span class="tag-hot" data-i="hot">TEZKOR</span></b><span class="pr">60 000</span><small data-i="t2s">2,4 km · bugun 14:00</small></div>
+            <div class="task"><b data-i="t3">Rasm osish (3 ta)</b><span class="pr">50 000</span><small data-i="t3s">600 m · 30 daq</small></div>
+            <div class="task"><b data-i="t4">Hovlini tozalash</b><span class="pr">70 000</span><small data-i="t4s">900 m · 1 soat</small></div>
+            <div class="task"><b data-i="t5">Jumrakni almashtirish</b><span class="pr">45 000</span><small data-i="t5s">1,5 km · 40 daq</small></div>
+          </div>
+          <div class="tabbar"><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <div class="toast toast-a" aria-hidden="true">
+        <span class="av" style="background:var(--mint-soft)">D</span>
+        <span><b data-i="toastA">Dilnoza qabul qildi</b><small data-i="toastAs">Talaba · ★ 4,9 · 6 daqiqada keladi</small></span>
+      </div>
+      <div class="toast toast-b" aria-hidden="true">
+        <span class="av" style="background:#ffe7b8">✓</span>
+        <span><b data-i="toastB">Ish bajarildi</b><small data-i="toastBs">120 000 soʻm ilova orqali toʻlandi</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marquee">
+    <span data-i="m1">Mebel yigʻish</span><span data-i="m2">Rasm osish</span><span data-i="m3">Navbatda turish</span><span data-i="m4">Kichik taʼmirlash</span><span data-i="m5">Bogʻ ishlari</span><span data-i="m6">Yuk koʻtarish</span><span data-i="m7">Jumrak almashtirish</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="sec" id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="pbEyebrow">Muammo</span>
+      <h2 data-i="pbTitle">Kichik, lekin zarur ishlar uchun bozorda joy yoʻq</h2>
+      <p data-i="pbLead">Shkafni yigʻish yoki javonni osish 40 daqiqalik ish. Lekin buning uchun ishonchli odam topish yarim kunni oladi.</p>
+    </div>
+    <div class="problems">
+      <article class="problem">
+        <svg class="ico"><use href="#i-clock"/></svg>
+        <h3 data-i="pb1t">Vaqt tanqisligi</h3>
+        <p data-i="pb1p">Shahar aholisi mebel yigʻish, rasm osish kabi mayda ishlarga vaqt topa olmaydi.</p>
+      </article>
+      <article class="problem">
+        <svg class="ico"><use href="#i-alert"/></svg>
+        <h3 data-i="pb2t">Ishonchsiz tarmoq</h3>
+        <p data-i="pb2p">Notanish ustalarni topish qiyin. Sifat, narx va xavfsizlik kafolatlanmagan.</p>
+      </article>
+      <article class="problem">
+        <svg class="ico"><use href="#i-building"/></svg>
+        <h3 data-i="pb3t">Platformalar chetlab oʻtadi</h3>
+        <p data-i="pb3p">Mavjud xizmatlar yirik taʼmirlash ishlariga moʻljallangan. Kichik buyurtmalarga hech kim javob bermaydi.</p>
+      </article>
+    </div>
+    <div class="quote-band">
+      <div class="big" data-i="qbBig">30 daq – 2 soat</div>
+      <p data-i="qbText">Qoʻlda orqali har qanday kichik ish shu vaqt ichida bajariladi. Uni yaqin atrofdagi talaba, uy bekasi yoki pensioner qiladi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sec dark" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="hwEyebrow">Qanday ishlaydi</span>
+      <h2 data-i="hwTitle">Toʻrt qadam: buyurtmadan bahogacha</h2>
+      <p data-i="hwLead">Qadamni tanlang va telefonda qanday koʻrinishini koʻring.</p>
+    </div>
+    <div class="how" id="how-box">
+      <div class="steps" role="tablist" aria-label="Jarayon bosqichlari">
+        <button class="step" role="tab" aria-selected="true" data-step="0" id="st0">
+          <span class="n">1</span>
+          <span><h3 data-i="s1t">Buyurtma bering</h3><p data-i="s1p">Ish tavsifi va taklif narxini ilovaga joylang. Bir daqiqadan kam vaqt ketadi.</p></span>
+          <span class="bar"><i></i></span>
+        </button>
+        <button class="step" role="tab" aria-selected="false" data-step="1" id="st1">
+          <span class="n">2</span>
+          <span><h3 data-i="s2t">Ijrochi topiladi</h3><p data-i="s2p">Yaqin atrofdagi tekshirilgan ijrochilar buyurtmani koʻradi. Reyting boʻyicha tanlaysiz.</p></span>
+          <span class="bar"><i></i></span>
+        </button>
+        <button class="step" role="tab" aria-selected="false" data-step="2" id="st2">
+          <span class="n">3</span>
+          <span><h3 data-i="s3t">Ish bajariladi</h3><p data-i="s3p">Ijrochi belgilangan vaqtda keladi. Uni GPS orqali xaritada kuzatib turasiz.</p></span>
+          <span class="bar"><i></i></span>
+        </button>
+        <button class="step" role="tab" aria-selected="false" data-step="3" id="st3">
+          <span class="n">4</span>
+          <span><h3 data-i="s4t">Toʻlov va baho</h3><p data-i="s4p">Ilova ichida xavfsiz toʻlov. Ikki tomon bir-biriga baho qoʻyadi.</p></span>
+          <span class="bar"><i></i></span>
+        </button>
+      </div>
+
+      <div class="phone how-phone" aria-live="polite">
+        <div class="screen">
+          <div class="notch"></div>
+          <section class="on" data-screen="0">
+            <div class="app-top"><h4 data-i="sc1h">Yangi buyurtma</h4></div>
+            <div class="sc-body">
+              <div class="pills"><span class="on" data-i="sc1c1">Mebel</span><span data-i="sc1c2">Taʼmir</span><span data-i="sc1c3">Navbat</span><span data-i="sc1c4">Bogʻ</span></div>
+              <div class="field"><small data-i="sc1l1">Ish tavsifi</small><b data-i="sc1v1">2 eshikli shkafni yigʻish, instruksiya bor</b></div>
+              <div class="field"><small data-i="sc1l2">Manzil</small><b data-i="sc1v2">Yunusobod, 11-mavze</b></div>
+              <div class="field"><small data-i="sc1l3">Vaqt</small><b data-i="sc1v3">Bugun, 18:00 dan keyin</b></div>
+              <div class="field"><small data-i="sc1l4">Taklif narxi</small><b class="mono">120 000 soʻm</b></div>
+              <div class="app-btn" data-i="sc1btn">Eʼlon qilish</div>
+            </div>
+          </section>
+          <section data-screen="1">
+            <div class="app-top"><h4 data-i="sc2h">3 ijrochi javob berdi</h4></div>
+            <div class="sc-body">
+              <div class="offer"><span class="av" style="background:var(--mint-soft)">D</span><span><b>Dilnoza</b><small><span data-i="sc2r1">Talaba</span> · <span class="star">★</span> 4,9 · 800 m</small></span><span class="ok" data-i="sc2ok">Tanlash</span></div>
+              <div class="offer"><span class="av" style="background:#ffe7b8">R</span><span><b data-i="sc2n2">Rustam aka</b><small><span data-i="sc2r2">Pensioner</span> · <span class="star">★</span> 5,0 · 1,4 km</small></span><span class="ok" data-i="sc2ok2">Tanlash</span></div>
+              <div class="offer"><span class="av" style="background:#e3e1fb">S</span><span><b>Sardor</b><small><span data-i="sc2r3">Usta</span> · <span class="star">★</span> 4,8 · 2,1 km</small></span><span class="ok" data-i="sc2ok3">Tanlash</span></div>
+              <div class="field"><small data-i="sc2l">Tekshiruv</small><b data-i="sc2v">Hammasi ID + yuz orqali tasdiqlangan</b></div>
+            </div>
+          </section>
+          <section data-screen="2">
+            <div class="app-top"><h4 data-i="sc3h">Dilnoza yoʻlda</h4></div>
+            <div class="sc-body">
+              <div class="minimap">
+                <svg viewBox="0 0 200 150" preserveAspectRatio="none" aria-hidden="true">
+                  <g stroke="#ffffff" stroke-width="7" fill="none"><path d="M0 40 H200"/><path d="M0 105 H200"/><path d="M60 0 V150"/><path d="M150 0 V150"/><path d="M0 150 L120 0"/></g>
+                  <path d="M150 128 V105 H60 V40" stroke="#10685f" stroke-width="3" fill="none" stroke-dasharray="5 4" stroke-linecap="round"/>
+                  <circle cx="150" cy="128" r="6" fill="#22c79e" stroke="#ffffff" stroke-width="2.5"/>
+                  <circle cx="60" cy="40" r="9" fill="#0b4f4a" fill-opacity=".18"/><circle cx="60" cy="40" r="5" fill="#0b4f4a" stroke="#ffffff" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="eta"><span><small style="color:var(--muted);display:block;font-size:9.5px" data-i="sc3l">Yetib kelish</small><b data-i="sc3v">6 daqiqa</b></span><span style="font-family:var(--f-mono);font-size:10px;color:var(--muted)">GPS · 800 m</span></div>
+              <div class="progress"><i></i></div>
+              <div class="field"><small data-i="sc3l2">Holat</small><b data-i="sc3v2">Buyurtma qabul qilindi → yoʻlda → ish</b></div>
+              <div class="app-btn" style="background:var(--white);box-shadow:inset 0 0 0 1px var(--line)" data-i="sc3btn">Ilova orqali yozish</div>
+            </div>
+          </section>
+          <section data-screen="3">
+            <div class="app-top"><h4 data-i="sc4h">Ish bajarildi</h4></div>
+            <div class="sc-body">
+              <div class="done"><span class="ck"><svg class="ico" style="width:22px;height:22px;stroke-width:2.6"><use href="#i-check"/></svg></span><b style="font-size:12.5px" data-i="sc4d">Shkaf yigʻildi · 1 soat 10 daq</b></div>
+              <div class="receipt">
+                <div class="row"><span data-i="sc4r1">Ish narxi</span><span>120 000</span></div>
+                <div class="row"><span data-i="sc4r2">Ilova komissiyasi</span><span data-i="sc4r2v">ichida</span></div>
+                <div class="row tot"><span data-i="sc4r3">Jami toʻlandi</span><span>120 000 soʻm</span></div>
+              </div>
+              <div class="field" style="text-align:center"><small data-i="sc4l">Dilnozaga baho bering</small><div class="stars">★★★★★</div></div>
+              <div class="app-btn" data-i="sc4btn">Yuborish</div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="sec" id="trust">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="trEyebrow">Ishonch va xavfsizlik</span>
+      <h2 data-i="trTitle">Eshigingizni notanish odamga ochish oson emas. Biz buni tushunamiz.</h2>
+      <p data-i="trLead">Har bir xavfga aniq javobimiz bor. Ishonch tizimi ishga tushgandan keyin ham doimiy takomillashtiriladi.</p>
+    </div>
+    <div class="trust">
+      <article class="pillar">
+        <div class="pillar-top"><span class="badge"><svg class="ico"><use href="#i-eye"/></svg></span><h3 data-i="tr1t">Yolgʻon-musbat nazorati</h3></div>
+        <div class="risk"><small data-i="riskL">Xavf</small><p data-i="tr1r">ID/yuz tekshiruvi baʼzan halol foydalanuvchini xato ravishda shubhali deb belgilashi mumkin.</p></div>
+        <span class="measures-label" data-i="measL">Choralar</span>
+        <ul class="measures">
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr1m1">Shubhali holatlarni inson qoʻshimcha tekshiradi</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr1m2">Foydalanuvchi uchun tezkor apellyatsiya</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr1m3">Koʻp faktorli tasdiqlash: ID + yuz + xatti-harakat</span></li>
+        </ul>
+      </article>
+      <article class="pillar">
+        <div class="pillar-top"><span class="badge"><svg class="ico"><use href="#i-lock"/></svg></span><h3 data-i="tr2t">Maxfiylik himoyasi</h3></div>
+        <div class="risk"><small data-i="riskL2">Xavf</small><p data-i="tr2r">Joylashuv, ID va shaxsiy maʼlumotlarni saqlash qatʼiy himoyani talab qiladi.</p></div>
+        <span class="measures-label" data-i="measL2">Choralar</span>
+        <ul class="measures">
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr2m1">Maʼlumotlar shifrlangan holda saqlanadi</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr2m2">Saqlash muddati va maqsadi aniq cheklangan</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr2m3">Siyosat foydalanuvchi roziligiga asoslangan</span></li>
+        </ul>
+      </article>
+      <article class="pillar">
+        <div class="pillar-top"><span class="badge"><svg class="ico"><use href="#i-refresh"/></svg></span><h3 data-i="tr3t">Doimiy yangilanish</h3></div>
+        <div class="risk"><small data-i="riskL3">Xavf</small><p data-i="tr3r">Firibgarlar yangi usullar topgani sari nazorat mexanizmlari ham yangilanishi kerak.</p></div>
+        <span class="measures-label" data-i="measL3">Choralar</span>
+        <ul class="measures">
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr3m1">Tekshiruv modeli muntazam qayta oʻqitiladi</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr3m2">Yangi firibgarlik usullarini kuzatuvchi jamoa</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span data-i="tr3m3">Xavfsizlik koʻrsatkichlari doimiy monitoringda</span></li>
+        </ul>
+      </article>
+    </div>
+    <div class="trust-strip">
+      <div class="ts"><svg class="ico"><use href="#i-wallet"/></svg><span><b data-i="ts1b">Ilova ichida toʻlov</b><span data-i="ts1s">Naqd pul va tortishuvlarsiz</span></span></div>
+      <div class="ts"><svg class="ico"><use href="#i-star"/></svg><span><b data-i="ts2b">Ikki tomonlama reyting</b><span data-i="ts2s">Buyurtmachi ham, ijrochi ham baholanadi</span></span></div>
+      <div class="ts"><svg class="ico"><use href="#i-pin"/></svg><span><b data-i="ts3b">GPS kuzatuv</b><span data-i="ts3s">Ijrochi qayerdaligini doim bilasiz</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL + CALC -->
+<section class="sec dark" id="model">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="mdEyebrow">Biznes model</span>
+      <h2 data-i="mdTitle">Foydalanuvchi uchun bepul. Daromad faqat bajarilgan ishdan.</h2>
+    </div>
+    <div class="model">
+      <div class="model-points">
+        <div class="mp"><b>10–15%</b><div><h3 data-i="mp1t">Har bir bitimdan komissiya</h3><p data-i="mp1p">Ilovani yuklab olish va ishlatish bepul. Komissiya faqat ish bajarilgach olinadi.</p></div></div>
+        <div class="mp"><b>+ <span data-i="mp2b">narx</span></b><div><h3 data-i="mp2t">Shoshilinch buyurtmalar</h3><p data-i="mp2p">Tezkor ish uchun buyurtmachi qoʻshimcha toʻlov qoʻshadi. Bu ijrochiga tezroq kelish uchun sabab boʻladi.</p></div></div>
+        <div class="mp"><b data-i="mp3b">Obuna</b><div><h3 data-i="mp3t">Kelgusida: oylik obuna</h3><p data-i="mp3p">Bepul tarif limitli xizmatlar bilan qoladi. Koʻp foydalanadiganlar uchun obuna.</p></div></div>
+        <div class="mp"><b><svg class="ico" style="width:34px;height:34px"><use href="#i-trend"/></svg></b><div><h3 data-i="mp4t">Kengaytirish salohiyati</h3><p data-i="mp4p">Yangi shaharlar va xizmat toifalariga bosqichma-bosqich kengayish.</p></div></div>
+      </div>
+
+      <div class="calc" id="calc">
+        <div><h3 data-i="cTitle">Bitim kalkulyatori</h3><p class="sub" data-i="cSub">Bitta buyurtmadagi pul qanday taqsimlanishini koʻring.</p></div>
+        <div class="ctl">
+          <div class="ctl-top"><label for="price" data-i="cPrice">Ish narxi</label><output id="price-out" for="price">120 000 soʻm</output></div>
+          <input type="range" id="price" min="20000" max="600000" step="5000" value="120000">
+          <div class="presets">
+            <button type="button" data-p="50000" data-i="pr1">Rasm osish</button>
+            <button type="button" data-p="120000" data-i="pr2">Shkaf yigʻish</button>
+            <button type="button" data-p="60000" data-i="pr3">Navbat</button>
+            <button type="button" data-p="200000" data-i="pr4">Bogʻ ishi</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top"><label for="rate" data-i="cRate">Platforma komissiyasi</label><output id="rate-out" for="rate">12%</output></div>
+          <input type="range" id="rate" min="10" max="15" step="1" value="12">
+        </div>
+        <div class="toggle">
+          <span><b data-i="cUrg">Shoshilinch buyurtma</b><span data-i="cUrgS">Misol uchun +25% qoʻshimcha toʻlov</span></span>
+          <label class="switch"><input type="checkbox" id="urgent" aria-label="Shoshilinch buyurtma"><i></i></label>
+        </div>
+        <div class="split">
+          <div class="split-bar" aria-hidden="true"><i class="a" id="bar-a"></i><i class="c" id="bar-c"></i><i class="b" id="bar-b"></i></div>
+          <div class="result">
+            <div class="res" style="--dot:var(--ink)"><small data-i="cR1">Buyurtmachi toʻlaydi</small><b id="r-pay">120 000</b></div>
+            <div class="res" style="--dot:var(--mint)"><small data-i="cR2">Ijrochi oladi</small><b id="r-work">105 600</b></div>
+            <div class="res" style="--dot:var(--teal)"><small data-i="cR3">Platforma</small><b id="r-fee">14 400</b></div>
+          </div>
+        </div>
+        <p class="note" data-i="cNote">Komissiya oraligʻi taqdimotdagi modeldan olingan. Shoshilinch ustama miqdori misol sifatida koʻrsatilgan.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="wnEyebrow">Nega aynan hozir</span>
+      <h2 data-i="wnTitle">Bozor tayyor, vosita esa hali yoʻq</h2>
+    </div>
+    <div class="why">
+      <article class="why-card"><svg class="ico"><use href="#i-trend"/></svg><h3 data-i="w1t">Gig-iqtisodiyot oʻsmoqda</h3><p data-i="w1p">Odamlar qoʻshimcha, moslashuvchan daromad manbai izlamoqda.</p></article>
+      <article class="why-card"><svg class="ico"><use href="#i-clock"/></svg><h3 data-i="w2t">Vaqt tanqisligi kuchaymoqda</h3><p data-i="w2p">Shahar aholisi kundalik mayda ishlarga vaqt ajrata olmayapti.</p></article>
+      <article class="why-card"><svg class="ico"><use href="#i-target"/></svg><h3 data-i="w3t">Bozorda boʻshliq bor</h3><p data-i="w3p">Mikro-xizmatlar uchun ishonchli, qulay vosita hali yoʻq.</p></article>
+      <article class="why-card feature"><svg class="ico"><use href="#i-flag"/></svg><h3 data-i="w4t">Birinchi boʻlish ustunligi</h3><p data-i="w4p">Bitta shaharda chuqur tarmoq raqobatchilar uchun toʻsiq yaratadi.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="sec dark" id="road">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="rdEyebrow">Kelgusi qadamlar</span>
+      <h2 data-i="rdTitle">Ishonchli yordam, bir tugma bosish masofasida</h2>
+    </div>
+    <ol class="road">
+      <li class="ms now"><span class="dot">1</span><small data-i="r1s">Hozir</small><h3 data-i="r1t">MVP ishlab chiqish</h3><p data-i="r1p">Asosiy funksiyalar bilan sinov versiyasini tayyorlash.</p></li>
+      <li class="ms"><span class="dot">2</span><small data-i="r2s">Keyingi</small><h3 data-i="r2t">Bitta shaharda test</h3><p data-i="r2p">Toshkentda cheklangan miqyosda ishga tushirish.</p></li>
+      <li class="ms"><span class="dot">3</span><small data-i="r3s">Maqsad</small><h3 data-i="r3t">Ijrochilarni jalb qilish</h3><div class="kpi goal">500+</div><p data-i="r3p">Dastlabki tekshirilgan ijrochilar tarmogʻini shakllantirish.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section class="sec" id="join">
+  <div class="wrap join">
+    <div class="join-copy">
+      <span class="eyebrow" data-i="jnEyebrow">Kutish roʻyxati</span>
+      <h2 data-i="jnTitle">Toshkentda birinchilardan boʻling</h2>
+      <p data-i="jnLead">Ishga tushganimizda sizga birinchi boʻlib xabar beramiz. Ijrochilar uchun tekshiruv navbati ham shu yerdan boshlanadi.</p>
+      <ul class="perks">
+        <li><svg class="ico"><use href="#i-check"/></svg><span data-i="pk1">Ilovadan foydalanish bepul</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span data-i="pk2">Ijrochilar uchun moslashuvchan qoʻshimcha daromad</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span data-i="pk3">Birinchi foydalanuvchilar fikri mahsulotni shakllantiradi</span></li>
+      </ul>
+    </div>
+
+    <form class="form" id="form" novalidate>
+      <div id="form-body" style="display:grid;gap:18px">
+        <div class="seg" role="group" aria-label="Rol">
+          <button type="button" id="role-client" aria-pressed="true"><span data-i="roleA">Buyurtmachi</span><small data-i="roleAs">Ish berman</small></button>
+          <button type="button" id="role-worker" aria-pressed="false"><span data-i="roleB">Ijrochi</span><small data-i="roleBs">Ish bajaraman</small></button>
+        </div>
+        <div class="fld">
+          <label for="name" data-i="fName">Ismingiz</label>
+          <input id="name" name="name" autocomplete="given-name" placeholder="Masalan, Aziza">
+          <span class="err" id="name-err" hidden data-i="eName">Ismingizni yozing.</span>
+        </div>
+        <div class="row2">
+          <div class="fld">
+            <label for="phone" data-i="fPhone">Telefon raqam</label>
+            <input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="+998 90 123 45 67">
+            <span class="err" id="phone-err" hidden data-i="ePhone">9 xonali raqamni kiriting: 90 123 45 67.</span>
+          </div>
+          <div class="fld">
+            <label for="district" data-i="fDist">Tuman</label>
+            <select id="district" name="district">
+              <option>Yunusobod</option><option>Chilonzor</option><option>Mirzo Ulugʻbek</option><option>Yakkasaroy</option><option>Shayxontohur</option><option>Olmazor</option><option>Mirobod</option><option>Sergeli</option><option>Uchtepa</option><option>Yashnobod</option><option>Bektemir</option><option>Yangihayot</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld" id="skills-fld" hidden>
+          <span style="font-size:14px;font-weight:600" data-i="fSkills">Qaysi ishlarni bajara olasiz?</span>
+          <div class="skills">
+            <label><input type="checkbox" name="skill" value="furniture" id="sk-furniture"><span data-i="sk1">Mebel yigʻish</span></label>
+            <label><input type="checkbox" name="skill" value="repair" id="sk-repair"><span data-i="sk2">Kichik taʼmirlash</span></label>
+            <label><input type="checkbox" name="skill" value="queue" id="sk-queue"><span data-i="sk3">Navbatda turish</span></label>
+            <label><input type="checkbox" name="skill" value="garden" id="sk-garden"><span data-i="sk4">Bogʻ ishlari</span></label>
+            <label><input type="checkbox" name="skill" value="moving" id="sk-moving"><span data-i="sk5">Yuk koʻtarish</span></label>
+            <label><input type="checkbox" name="skill" value="cleaning" id="sk-cleaning"><span data-i="sk6">Tozalash</span></label>
+          </div>
+        </div>
+        <div class="form-err" id="form-err" hidden></div>
+        <button class="btn btn-ink" type="submit" id="submit-btn"><span data-i="fSubmit">Roʻyxatga yozilish</span> <svg class="ico" style="width:20px;height:20px"><use href="#i-arrow"/></svg></button>
+        <p class="fine" data-i="fFine">Maʼlumotlaringiz faqat ishga tushish haqida xabar berish uchun ishlatiladi.</p>
+      </div>
+      <div class="closed" id="form-closed" hidden>
+        <h3 data-i="clT">Arizalar vaqtincha yopiq</h3>
+        <p data-i="clP">Hozir yangi arizalar qabul qilinmayapti. Tez orada qayta ochamiz. Savollaringizni pastdagi forma orqali yuboring.</p>
+      </div>
+      <div class="success" id="success" hidden>
+        <span class="ck"><svg class="ico" style="width:26px;height:26px;stroke-width:2.6"><use href="#i-check"/></svg></span>
+        <h3 id="succ-title">Rahmat!</h3>
+        <p id="succ-text"></p>
+        <button type="button" id="again" data-i="again">Yana bitta ariza qoldirish</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i="fqEyebrow">Savollar</span>
+      <h2 data-i="fqTitle">Koʻp beriladigan savollar</h2>
+    </div>
+    <div class="faq">
+      <details open><summary><span data-i="q1">Kim ijrochi boʻla oladi?</span><span class="pm"><svg class="ico" style="width:16px;height:16px"><use href="#i-plus"/></svg></span></summary><p data-i="a1">Yaqin atrofda yashovchi istalgan kishi: talaba, uy bekasi, pensioner yoki usta. Har bir ijrochi ID, yuz va xatti-harakat boʻyicha koʻp faktorli tekshiruvdan oʻtadi.</p></details>
+      <details><summary><span data-i="q2">Xizmat qancha turadi?</span><span class="pm"><svg class="ico" style="width:16px;height:16px"><use href="#i-plus"/></svg></span></summary><p data-i="a2">Ilovadan foydalanish bepul. Ish narxini buyurtmachi taklif qiladi. Platforma faqat bajarilgan bitimdan 10–15% komissiya oladi.</p></details>
+      <details><summary><span data-i="q3">Toʻlov qanday amalga oshiriladi?</span><span class="pm"><svg class="ico" style="width:16px;height:16px"><use href="#i-plus"/></svg></span></summary><p data-i="a3">Toʻlov ilova ichida, ish bajarilgandan keyin amalga oshiriladi. Shundan soʻng ikki tomon bir-biriga baho qoʻyadi.</p></details>
+      <details><summary><span data-i="q4">Agar tizim meni xato bilan bloklasa-chi?</span><span class="pm"><svg class="ico" style="width:16px;height:16px"><use href="#i-plus"/></svg></span></summary><p data-i="a4">Shubhali holatlarni inson qoʻshimcha tekshiradi, sizda esa tezkor apellyatsiya imkoniyati bor. Avtomatik tekshiruv yakuniy qaror emas.</p></details>
+      <details><summary><span data-i="q5">Qachon va qayerda ishga tushadi?</span><span class="pm"><svg class="ico" style="width:16px;height:16px"><use href="#i-plus"/></svg></span></summary><p data-i="a5">Avval MVP tayyorlanadi, keyin Toshkentda cheklangan miqyosda sinov boshlanadi. Kutish roʻyxatidagilar birinchi boʻlib taklif oladi.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact" style="padding-top:0">
+  <div class="wrap contact">
+    <div class="contact-copy">
+      <span class="eyebrow" data-i="ctEyebrow">Aloqa</span>
+      <h2 data-i="ctTitle">Savol, taklif yoki hamkorlik?</h2>
+      <p data-i="ctLead">Yozib qoldiring, jamoamiz siz bilan bogʻlanadi. Investorlar va hamkorlar uchun ham shu forma.</p>
+      <div class="reach" id="reach"></div>
+    </div>
+    <form class="form" id="cform" novalidate>
+      <div id="cform-body" style="display:grid;gap:18px">
+        <div class="row2">
+          <div class="fld"><label for="c-name" data-i="cfName">Ismingiz</label><input id="c-name" autocomplete="name"><span class="err" id="c-name-err" hidden data-i="eName2">Ismingizni yozing.</span></div>
+          <div class="fld"><label for="c-contact" data-i="cfContact">Telefon yoki Telegram</label><input id="c-contact" placeholder="+998 … / @username"><span class="err" id="c-contact-err" hidden data-i="eContact">Bogʻlanish uchun maʼlumot qoldiring.</span></div>
+        </div>
+        <div class="fld"><label for="c-text" data-i="cfText">Xabar</label><textarea id="c-text" maxlength="2000"></textarea><span class="err" id="c-text-err" hidden data-i="eText">Xabar matnini yozing.</span></div>
+        <div class="form-err" id="cform-err" hidden></div>
+        <button class="btn btn-ink" type="submit" id="c-submit"><span data-i="cfSubmit">Xabar yuborish</span> <svg class="ico" style="width:20px;height:20px"><use href="#i-arrow"/></svg></button>
+      </div>
+      <div class="success" id="c-success" hidden>
+        <span class="ck"><svg class="ico" style="width:26px;height:26px;stroke-width:2.6"><use href="#i-check"/></svg></span>
+        <h3 data-i="cfOkT">Xabaringiz yuborildi</h3>
+        <p data-i="cfOkP">Jamoamiz tez orada siz bilan bogʻlanadi.</p>
+        <button type="button" id="c-again" data-i="cfAgain">Yana yozish</button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="dark foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <a class="logo" href="#top"><span class="logo-mark"><svg class="ico" style="stroke-width:2.2"><use href="#i-hand"/></svg></span>Qoʻlda</a>
+        <p data-i="ftText">Kundalik mikro-ishlarni yaqin atrofdagi odamlar bilan tez va ishonchli hal qiluvchi platforma.</p>
+        <div class="foot-reach" id="foot-reach"></div>
+      </div>
+      <div>
+        <h4 data-i="ftH1">Mahsulot</h4>
+        <ul><li><a href="#how" data-i="ft1">Qanday ishlaydi</a></li><li><a href="#trust" data-i="ft2">Xavfsizlik</a></li><li><a href="#model" data-i="ft3">Narxlar</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i="ftH2">Qoʻshilish</h4>
+        <ul><li><a href="#join" data-i="ft4">Buyurtmachilar uchun</a></li><li><a href="#join" data-i="ft5">Ijrochilar uchun</a></li><li><a href="#contact" data-i="ft7">Aloqa</a></li><li><a href="#admin" data-i="ft8">Admin panel</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bot"><span>© 2026 Qoʻlda · <span data-i="ftCity">Toshkent, Oʻzbekiston</span></span><span data-i="ftTag">Mebel yigʻish · Kichik taʼmirlash · Navbatda turish · Bogʻ ishlari</span></div>
+    <div class="wordmark" aria-hidden="true">Qoʻlda</div>
+  </div>
+</footer>
+
+<div id="admin" class="adm" hidden><div class="wrap" id="adm-root"></div></div>
+<div class="snack" id="snack" role="status" hidden></div>
+
+<script>
+(function(){
+  /* ---------- i18n ---------- */
+  const RU = {
+    nav1:"Как это работает",nav2:"Безопасность",nav3:"Цены",nav4:"План",nav5:"Вопросы",navCta:"Записаться",
+    heroEyebrow:"Скоро в Ташкенте",heroTitle:"Мелкие дела. <em>Соседи</em> рядом. Одна кнопка.",
+    heroLead:"Qoʻlda — платформа, где бытовые микро-задачи быстро и надёжно решают люди, которые живут рядом. Опубликуйте задачу, её выполнит сосед.",
+    heroCta1:"Стать одним из первых",heroCta2:"Стать исполнителем",
+    cat1:"Сборка мебели",cat2:"Мелкий ремонт",cat3:"Постоять в очереди",cat4:"Работа в саду",cat5:"Повесить картину",
+    f1b:"30 мин – 2 часа",f1s:"время выполнения",f2b:"0 сум",f2s:"пользование приложением",f3s:"проверенных исполнителей — цель",
+    pLoc:"Юнусабад, Ташкент",pTitle:"Задачи рядом",pSearch:"Чем помочь?",
+    t1:"Собрать шкаф",t1s:"1,2 км · 1–2 часа",t2:"Постоять в очереди",hot:"СРОЧНО",t2s:"2,4 км · сегодня 14:00",t3:"Повесить картины (3 шт)",t3s:"600 м · 30 мин",t4:"Убрать двор",t4s:"900 м · 1 час",t5:"Заменить кран",t5s:"1,5 км · 40 мин",
+    toastA:"Дилноза приняла заказ",toastAs:"Студентка · ★ 4,9 · будет через 6 мин",toastB:"Работа выполнена",toastBs:"120 000 сум оплачено в приложении",
+    m1:"Сборка мебели",m2:"Повесить картину",m3:"Очередь",m4:"Мелкий ремонт",m5:"Работа в саду",m6:"Поднять груз",m7:"Заменить кран",
+    pbEyebrow:"Проблема",pbTitle:"Для мелких, но нужных дел на рынке нет места",
+    pbLead:"Собрать шкаф или повесить полку — работа на 40 минут. Но чтобы найти надёжного человека, уходит полдня.",
+    pb1t:"Нехватка времени",pb1p:"Жителям города некогда собирать мебель, вешать картины и делать другие мелкие дела.",
+    pb2t:"Нет доверия",pb2p:"Незнакомого мастера найти сложно. Качество, цена и безопасность не гарантированы.",
+    pb3t:"Платформы проходят мимо",pb3p:"Существующие сервисы рассчитаны на крупный ремонт. На маленькие заказы никто не откликается.",
+    qbBig:"30 мин – 2 часа",qbText:"За это время через Qoʻlda выполняется любое мелкое дело. Его делает студент, домохозяйка или пенсионер, который живёт рядом.",
+    hwEyebrow:"Как это работает",hwTitle:"Четыре шага: от заказа до оценки",hwLead:"Выберите шаг и посмотрите, как он выглядит в телефоне.",
+    s1t:"Оформите заказ",s1p:"Опишите задачу и предложите цену. Это занимает меньше минуты.",
+    s2t:"Находится исполнитель",s2p:"Проверенные исполнители поблизости видят заказ. Вы выбираете по рейтингу.",
+    s3t:"Работа выполняется",s3p:"Исполнитель приходит в назначенное время. Вы видите его на карте по GPS.",
+    s4t:"Оплата и оценка",s4p:"Безопасная оплата в приложении. Обе стороны ставят друг другу оценку.",
+    sc1h:"Новый заказ",sc1c1:"Мебель",sc1c2:"Ремонт",sc1c3:"Очередь",sc1c4:"Сад",sc1l1:"Описание",sc1v1:"Собрать двухдверный шкаф, инструкция есть",sc1l2:"Адрес",sc1v2:"Юнусабад, 11-й квартал",sc1l3:"Время",sc1v3:"Сегодня после 18:00",sc1l4:"Предложенная цена",sc1btn:"Опубликовать",
+    sc2h:"Откликнулись 3 исполнителя",sc2r1:"Студентка",sc2ok:"Выбрать",sc2n2:"Рустам ака",sc2r2:"Пенсионер",sc2ok2:"Выбрать",sc2r3:"Мастер",sc2ok3:"Выбрать",sc2l:"Проверка",sc2v:"Все подтверждены по ID + лицу",
+    sc3h:"Дилноза в пути",sc3l:"Прибытие",sc3v:"6 минут",sc3l2:"Статус",sc3v2:"Заказ принят → в пути → работа",sc3btn:"Написать в приложении",
+    sc4h:"Работа выполнена",sc4d:"Шкаф собран · 1 ч 10 мин",sc4r1:"Стоимость работы",sc4r2:"Комиссия сервиса",sc4r2v:"включена",sc4r3:"Итого оплачено",sc4l:"Оцените Дилнозу",sc4btn:"Отправить",
+    trEyebrow:"Доверие и безопасность",trTitle:"Открыть дверь незнакомцу непросто. Мы это понимаем.",trLead:"На каждый риск у нас есть конкретный ответ. Система доверия совершенствуется и после запуска.",
+    tr1t:"Контроль ложных срабатываний",riskL:"Риск",tr1r:"Проверка ID и лица иногда может ошибочно пометить честного пользователя как подозрительного.",measL:"Меры",
+    tr1m1:"Подозрительные случаи дополнительно проверяет человек",tr1m2:"Быстрая апелляция для пользователя",tr1m3:"Многофакторная проверка: ID + лицо + поведение",
+    tr2t:"Защита приватности",riskL2:"Риск",tr2r:"Хранение геолокации, ID и личных данных требует строгой защиты.",measL2:"Меры",
+    tr2m1:"Данные хранятся в зашифрованном виде",tr2m2:"Срок и цель хранения чётко ограничены",tr2m3:"Политика основана на согласии пользователя",
+    tr3t:"Постоянное обновление",riskL3:"Риск",tr3r:"Мошенники находят новые схемы, поэтому механизмы контроля тоже должны обновляться.",measL3:"Меры",
+    tr3m1:"Модель проверки регулярно переобучается",tr3m2:"Команда отслеживает новые схемы мошенничества",tr3m3:"Показатели безопасности под постоянным мониторингом",
+    ts1b:"Оплата в приложении",ts1s:"Без наличных и споров",ts2b:"Двусторонний рейтинг",ts2s:"Оценивают и заказчика, и исполнителя",ts3b:"GPS-отслеживание",ts3s:"Вы всегда знаете, где исполнитель",
+    mdEyebrow:"Бизнес-модель",mdTitle:"Бесплатно для пользователя. Доход только с выполненной работы.",
+    mp1t:"Комиссия с каждой сделки",mp1p:"Скачать и пользоваться приложением бесплатно. Комиссия берётся только после выполнения работы.",
+    mp2b:"цена",mp2t:"Срочные заказы",mp2p:"За срочность заказчик добавляет доплату. Это повод для исполнителя приехать быстрее.",
+    mp3b:"Подписка",mp3t:"В будущем: месячная подписка",mp3p:"Бесплатный тариф остаётся с лимитом услуг. Подписка для тех, кто пользуется часто.",
+    mp4t:"Потенциал роста",mp4p:"Поэтапный выход в новые города и категории услуг.",
+    cTitle:"Калькулятор сделки",cSub:"Посмотрите, как распределяются деньги в одном заказе.",cPrice:"Стоимость работы",
+    pr1:"Повесить картину",pr2:"Собрать шкаф",pr3:"Очередь",pr4:"Работа в саду",
+    cRate:"Комиссия платформы",cUrg:"Срочный заказ",cUrgS:"Например, доплата +25%",cR1:"Заказчик платит",cR2:"Исполнитель получает",cR3:"Платформа",
+    cNote:"Диапазон комиссии взят из модели в презентации. Размер срочной доплаты показан для примера.",
+    wnEyebrow:"Почему именно сейчас",wnTitle:"Рынок готов, а инструмента ещё нет",
+    w1t:"Гиг-экономика растёт",w1p:"Люди ищут дополнительный гибкий доход.",w2t:"Времени всё меньше",w2p:"Жителям города некогда заниматься мелкими бытовыми делами.",
+    w3t:"На рынке есть ниша",w3p:"Надёжного и удобного инструмента для микро-услуг пока нет.",w4t:"Преимущество первого",w4p:"Плотная сеть в одном городе создаёт барьер для конкурентов.",
+    rdEyebrow:"Следующие шаги",rdTitle:"Надёжная помощь на расстоянии одного нажатия",
+    r1s:"Сейчас",r1t:"Разработка MVP",r1p:"Подготовка тестовой версии с основными функциями.",
+    r2s:"Далее",r2t:"Тест в одном городе",r2p:"Ограниченный запуск в Ташкенте.",
+    r3s:"Цель",r3t:"Привлечение исполнителей",r3p:"Формирование первой сети проверенных исполнителей.",
+    jnEyebrow:"Лист ожидания",jnTitle:"Станьте одним из первых в Ташкенте",jnLead:"Мы сообщим вам первыми, когда запустимся. Отсюда же начинается очередь на проверку для исполнителей.",
+    pk1:"Пользоваться приложением бесплатно",pk2:"Гибкий дополнительный доход для исполнителей",pk3:"Отзывы первых пользователей формируют продукт",
+    roleA:"Заказчик",roleAs:"Даю задачи",roleB:"Исполнитель",roleBs:"Выполняю задачи",
+    fName:"Ваше имя",eName:"Напишите ваше имя.",fPhone:"Номер телефона",ePhone:"Введите 9-значный номер: 90 123 45 67.",fDist:"Район",
+    fSubmit:"Записаться",fFine:"Ваши данные используются только для уведомления о запуске.",again:"Оставить ещё одну заявку",
+    fqEyebrow:"Вопросы",fqTitle:"Частые вопросы",
+    q1:"Кто может стать исполнителем?",a1:"Любой человек, который живёт рядом: студент, домохозяйка, пенсионер или мастер. Каждый исполнитель проходит многофакторную проверку по ID, лицу и поведению.",
+    q2:"Сколько стоит сервис?",a2:"Пользоваться приложением бесплатно. Цену работы предлагает заказчик. Платформа берёт 10–15% комиссии только с выполненной сделки.",
+    q3:"Как происходит оплата?",a3:"Оплата проходит в приложении после выполнения работы. Затем обе стороны ставят друг другу оценку.",
+    q4:"А если система по ошибке меня заблокирует?",a4:"Подозрительные случаи дополнительно проверяет человек, а у вас есть быстрая апелляция. Автоматическая проверка не является окончательным решением.",
+    q5:"Когда и где запуск?",a5:"Сначала готовится MVP, затем начинается ограниченный тест в Ташкенте. Участники листа ожидания получат приглашение первыми.",
+    ftText:"Платформа, где бытовые микро-задачи быстро и надёжно решают люди, которые живут рядом.",ftH1:"Продукт",ft1:"Как это работает",ft2:"Безопасность",ft3:"Цены",ftH2:"Присоединиться",ft4:"Для заказчиков",ft5:"Для исполнителей",ft6:"Вопросы",
+    ftCity:"Ташкент, Узбекистан",ftTag:"Сборка мебели · Мелкий ремонт · Очереди · Работа в саду"
+  };
+  const UZ = {};
+  const nodes = document.querySelectorAll("[data-i]");
+  nodes.forEach(n => { UZ[n.dataset.i] = n.innerHTML; });
+  const extra = {
+    uz:{som:"soʻm",ph:"Masalan, Aziza",urgAria:"Shoshilinch buyurtma",succT:"Rahmat, {n}!",succC:"Toshkentda ishga tushganimizda {p} raqamiga birinchi boʻlib xabar beramiz.",succW:"Ijrochilar tekshiruvi boshlanganda {p} raqamiga qoʻngʻiroq qilamiz. Tuman: {d}."},
+    ru:{som:"сум",ph:"Например, Азиза",urgAria:"Срочный заказ",succT:"Спасибо, {n}!",succC:"Когда мы запустимся в Ташкенте, первыми сообщим на номер {p}.",succW:"Когда начнётся проверка исполнителей, позвоним на номер {p}. Район: {d}."}
+  };
+  let lang = "uz";
+  const onLangChange = [];
+  function setLang(l){
+    lang = l;
+    const dict = l === "ru" ? RU : UZ;
+    nodes.forEach(n => { const v = dict[n.dataset.i]; if (v != null) n.innerHTML = v; });
+    document.documentElement.lang = l === "ru" ? "ru" : "uz";
+    document.getElementById("lang-uz").setAttribute("aria-pressed", l === "uz");
+    document.getElementById("lang-ru").setAttribute("aria-pressed", l === "ru");
+    document.getElementById("name").placeholder = extra[l].ph;
+    document.getElementById("urgent").setAttribute("aria-label", extra[l].urgAria);
+    // keep marquee doubled after text swap
+    buildMarquee();
+    calc();
+    try { localStorage.setItem("qolda-lang", l); } catch(e){}
+    onLangChange.forEach(f => f());
+  }
+  document.getElementById("lang-uz").onclick = () => setLang("uz");
+  document.getElementById("lang-ru").onclick = () => setLang("ru");
+
+  /* ---------- marquee (duplicate for seamless loop) ---------- */
+  const mq = document.getElementById("marquee");
+  const mqBase = Array.from(mq.children);
+  function buildMarquee(){
+    mq.querySelectorAll(".clone").forEach(c => c.remove());
+    mqBase.forEach(s => { const c = s.cloneNode(true); c.classList.add("clone"); c.removeAttribute("data-i"); mq.appendChild(c); });
+  }
+
+  /* ---------- number format ---------- */
+  const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+  /* ---------- calculator ---------- */
+  const price = document.getElementById("price"), rate = document.getElementById("rate"), urgent = document.getElementById("urgent");
+  function paint(r){ const p = (r.value - r.min) / (r.max - r.min) * 100; r.style.setProperty("--p", p + "%"); }
+  function calc(){
+    const base = +price.value, c = +rate.value / 100, extraPay = urgent.checked ? base * 0.25 : 0;
+    const total = base + extraPay, fee = total * c, worker = total - fee;
+    const som = extra[lang].som;
+    document.getElementById("price-out").textContent = fmt(base) + " " + som;
+    document.getElementById("rate-out").textContent = rate.value + "%";
+    document.getElementById("r-pay").textContent = fmt(total) + " " + som;
+    document.getElementById("r-work").textContent = fmt(worker) + " " + som;
+    document.getElementById("r-fee").textContent = fmt(fee) + " " + som;
+    document.getElementById("bar-b").style.width = (worker / total * 100) + "%";
+    document.getElementById("bar-a").style.width = (fee / total * 100) + "%";
+    document.getElementById("bar-c").style.width = "0%";
+    paint(price); paint(rate);
+  }
+  price.addEventListener("input", calc); rate.addEventListener("input", calc); urgent.addEventListener("change", calc);
+  document.querySelectorAll(".presets button").forEach(b => b.addEventListener("click", () => { price.value = b.dataset.p; calc(); }));
+
+  /* ---------- how-it-works stepper ---------- */
+  const steps = Array.from(document.querySelectorAll(".step"));
+  const screens = Array.from(document.querySelectorAll(".how-phone [data-screen]"));
+  const box = document.getElementById("how-box");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let cur = 0, timer = null;
+  function show(i){
+    cur = i;
+    steps.forEach((s, k) => {
+      s.setAttribute("aria-selected", k === i);
+      const bar = s.querySelector(".bar i"); bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+    });
+    screens.forEach((s, k) => s.classList.toggle("on", k === i));
+  }
+  function auto(){ clearInterval(timer); if (reduce) return; timer = setInterval(() => show((cur + 1) % steps.length), 5000); }
+  steps.forEach((s, i) => s.addEventListener("click", () => { show(i); auto(); }));
+  box.addEventListener("mouseenter", () => { box.classList.add("paused"); clearInterval(timer); });
+  box.addEventListener("mouseleave", () => { box.classList.remove("paused"); auto(); });
+  steps.forEach((s, i) => s.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowRight"){ e.preventDefault(); const n = (i + 1) % steps.length; steps[n].focus(); show(n); auto(); }
+    if (e.key === "ArrowUp" || e.key === "ArrowLeft"){ e.preventDefault(); const n = (i + steps.length - 1) % steps.length; steps[n].focus(); show(n); auto(); }
+  }));
+  auto();
+
+  /* ---------- extra copy ---------- */
+  Object.assign(RU, {
+    fSkills:"Какие работы вы умеете делать?",sk1:"Сборка мебели",sk2:"Мелкий ремонт",sk3:"Постоять в очереди",sk4:"Работа в саду",sk5:"Переноска грузов",sk6:"Уборка",
+    clT:"Приём заявок временно закрыт",clP:"Сейчас новые заявки не принимаются. Скоро откроем снова. Вопросы можно отправить через форму ниже.",
+    ctEyebrow:"Связь",ctTitle:"Вопрос, предложение или партнёрство?",ctLead:"Напишите нам, и команда свяжется с вами. Эта же форма для инвесторов и партнёров.",
+    cfName:"Ваше имя",eName2:"Напишите ваше имя.",cfContact:"Телефон или Telegram",eContact:"Оставьте контакт для связи.",cfText:"Сообщение",eText:"Напишите текст сообщения.",
+    cfSubmit:"Отправить сообщение",cfOkT:"Сообщение отправлено",cfOkP:"Команда скоро свяжется с вами.",cfAgain:"Написать ещё",ft7:"Контакты",ft8:"Админ-панель"
+  });
+  Object.assign(extra.uz, {
+    errAuth:"Yuborib boʻlmadi: bu sahifada maʼlumot saqlash uchun claude.ai hisobingizga kirgan boʻlishingiz kerak.",
+    errRights:"Bu sahifada maʼlumot yuborish huquqingiz yoʻq.",
+    errQuota:"Baza toʻlib qolgan. Keyinroq urinib koʻring.",
+    errNet:"Yuborilmadi. Internetni tekshirib, qayta urinib koʻring.",
+    phone:"Telefon", tg:"Telegram", copy:"Nusxa olish", copied:"Nusxa olindi"
+  });
+  Object.assign(extra.ru, {
+    errAuth:"Не удалось отправить: чтобы сохранять данные на этой странице, войдите в аккаунт claude.ai.",
+    errRights:"У вас нет прав отправлять данные на этой странице.",
+    errQuota:"База заполнена. Попробуйте позже.",
+    errNet:"Не отправлено. Проверьте интернет и попробуйте ещё раз.",
+    phone:"Телефон", tg:"Telegram", copy:"Копировать", copied:"Скопировано"
+  });
+  const tx = k => extra[lang][k];
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const errText = e => {
+    const c = e && e.code;
+    if (c === "no_id" || c === "no_backend") return tx("errAuth");
+    if (c === "invalid_argument" || c === "42501") return tx("errRights");
+    if (c === "quota_exceeded") return tx("errQuota");
+    return tx("errNet");
+  };
+  let snackT = null;
+  function snack(msg){ const s = document.getElementById("snack"); s.textContent = msg; s.hidden = false; clearTimeout(snackT); snackT = setTimeout(() => { s.hidden = true; }, 2600); }
+
+  /* ======================================================
+     BACKEND
+     One API, three engines:
+       supabase  – self-hosted site with CONFIG filled in (public visitors can submit)
+       artifact  – the published claude.ai page (built-in database)
+       demo      – self-hosted without CONFIG (stores in this browser only)
+     ====================================================== */
+  const CONFIG = {
+    SUPABASE_URL: "",       // https://xxxx.supabase.co
+    SUPABASE_ANON_KEY: ""   // public anon key
+  };
+  const SKILLS = ["furniture","repair","queue","garden","moving","cleaning"];
+  const STATUSES = ["new","contacted","verified","rejected"];
+  const DEFAULT_SETTINGS = { bannerOn:false, bannerUz:"", bannerRu:"", phone:"", telegram:"", goal:500, formOpen:true };
+  const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const loadScript = src => new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => rej(new Error("script")); document.head.appendChild(s); });
+
+  function makeDemo(){
+    const K = { l:"qolda-demo-leads", m:"qolda-demo-messages", s:"qolda-demo-settings" };
+    const subs = { l:new Set(), m:new Set(), s:new Set() };
+    const read = k => { try { return JSON.parse(localStorage.getItem(K[k]) || (k === "s" ? "{}" : "[]")); } catch(e){ return k === "s" ? {} : []; } };
+    const mem = { l:read("l"), m:read("m"), s:read("s") };
+    const write = (k, v) => { mem[k] = v; try { localStorage.setItem(K[k], JSON.stringify(v)); } catch(e){} subs[k].forEach(f => f(v)); };
+    window.addEventListener("storage", e => { for (const k in K) if (e.key === K[k]) { mem[k] = read(k); subs[k].forEach(f => f(mem[k])); } });
+    const watch = (k, cb) => { subs[k].add(cb); cb(mem[k]); return () => subs[k].delete(cb); };
+    return {
+      mode:"demo",
+      async submitLead(l){ write("l", [{ ...l, id:newId(), status:"new", note:"", createdAt:Date.now() }, ...mem.l]); },
+      async submitMessage(m){ write("m", [{ ...m, id:newId(), read:false, createdAt:Date.now() }, ...mem.m]); },
+      watchSettings(cb){ return watch("s", cb); },
+      async isAdmin(){ return true; },
+      watchLeads(cb){ return watch("l", cb); },
+      async updateLead(id, p){ write("l", mem.l.map(x => x.id === id ? { ...x, ...p } : x)); },
+      async deleteLead(id){ write("l", mem.l.filter(x => x.id !== id)); },
+      watchMessages(cb){ return watch("m", cb); },
+      async updateMessage(id, p){ write("m", mem.m.map(x => x.id === id ? { ...x, ...p } : x)); },
+      async deleteMessage(id){ write("m", mem.m.filter(x => x.id !== id)); },
+      async saveSettings(s){ write("s", s); }
+    };
+  }
+
+  function makeOffline(){
+    const no = async () => { throw { code:"no_backend" }; };
+    return { mode:"offline", submitLead:no, submitMessage:no, watchSettings(cb){ cb({}); return () => {}; }, async isAdmin(){ return false; } };
+  }
+
+  async function makeArtifact(db, user){
+    const uid = user ? await user.id() : null;
+    const admin = user ? ((await user.canEdit()) || (await user.isOwner())) : false;
+    const msgSplit = fid => { const i = fid.lastIndexOf("~"); return [fid.slice(0, i), fid.slice(i + 1)]; };
+    async function editMsgs(fid, fn){
+      const [d, i] = msgSplit(fid); const ref = db.doc("messages/" + d); const s = await ref.get();
+      if (!s.exists) return;
+      await ref.set({ items: fn((s.data().items || []).slice(), i) });
+    }
+    return {
+      mode:"artifact",
+      async submitLead(l){
+        if (!uid) throw { code:"no_id" };
+        await db.doc("leads/" + uid).set({ ...l, status:"new", note:"", createdAt:Date.now() });
+      },
+      async submitMessage(m){
+        if (!uid) throw { code:"no_id" };
+        const ref = db.doc("messages/" + uid); const s = await ref.get();
+        const items = s.exists ? (s.data().items || []).slice(-19) : [];
+        await ref.set({ items: [...items, { ...m, id:newId(), read:false, createdAt:Date.now() }] });
+      },
+      watchSettings(cb){ return db.doc("site/settings").onSnapshot(s => cb(s.exists ? s.data() : {}), () => cb({})); },
+      async isAdmin(){ return admin; },
+      watchLeads(cb, err){
+        return db.collection("leads").orderBy("createdAt", "desc").limit(1000)
+          .onSnapshot(s => cb(s.docs.map(d => ({ ...d.data(), id:d.id }))), err);
+      },
+      async updateLead(id, p){ await db.doc("leads/" + id).update(p); },
+      async deleteLead(id){ await db.doc("leads/" + id).delete(); },
+      watchMessages(cb, err){
+        return db.collection("messages").limit(1000).onSnapshot(s => {
+          const out = [];
+          s.docs.forEach(d => (d.data().items || []).forEach(it => out.push({ ...it, id:d.id + "~" + it.id })));
+          out.sort((a, b) => b.createdAt - a.createdAt); cb(out);
+        }, err);
+      },
+      updateMessage(fid, p){ return editMsgs(fid, (items, i) => items.map(x => x.id === i ? { ...x, ...p } : x)); },
+      deleteMessage(fid){ return editMsgs(fid, (items, i) => items.filter(x => x.id !== i)); },
+      async saveSettings(s){ await db.doc("site/settings").set(s); }
+    };
+  }
+
+  async function makeSupabase(){
+    await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js");
+    const sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    const chk = r => { if (r.error) throw r.error; return r.data; };
+    const refreshers = new Set();
+    const refresh = () => refreshers.forEach(f => f());
+    function poll(fetcher, cb, err){
+      let stop = false;
+      const run = async () => { try { const d = await fetcher(); if (!stop) cb(d); } catch(e){ if (!stop && err) err(e); } };
+      refreshers.add(run); run(); const iv = setInterval(run, 20000);
+      return () => { stop = true; clearInterval(iv); refreshers.delete(run); };
+    }
+    const mapLead = r => ({ id:r.id, role:r.role, name:r.name, phone:r.phone, district:r.district, skills:r.skills || [], lang:r.lang, status:r.status, note:r.note || "", createdAt:Date.parse(r.created_at) });
+    const mapMsg = r => ({ id:r.id, name:r.name, contact:r.contact, text:r.text, read:r.read, createdAt:Date.parse(r.created_at) });
+    return {
+      mode:"supabase",
+      async submitLead(l){ chk(await sb.from("leads").insert({ role:l.role, name:l.name, phone:l.phone, district:l.district, skills:l.skills, lang:l.lang })); },
+      async submitMessage(m){ chk(await sb.from("messages").insert({ name:m.name, contact:m.contact, text:m.text })); },
+      watchSettings(cb){ return poll(async () => { const r = await sb.from("settings").select("data").eq("id", 1).maybeSingle(); return r.data ? r.data.data : {}; }, cb, () => cb({})); },
+      async session(){ return (await sb.auth.getSession()).data.session; },
+      async isAdmin(){
+        const s = await this.session(); if (!s) return false;
+        const r = await sb.from("admins").select("user_id").eq("user_id", s.user.id).maybeSingle();
+        return !!r.data;
+      },
+      async login(email, password){ chk(await sb.auth.signInWithPassword({ email, password })); },
+      async logout(){ await sb.auth.signOut(); },
+      watchLeads(cb, err){ return poll(async () => chk(await sb.from("leads").select("*").order("created_at", { ascending:false }).limit(1000)).map(mapLead), cb, err); },
+      async updateLead(id, p){ chk(await sb.from("leads").update(p).eq("id", id)); refresh(); },
+      async deleteLead(id){ chk(await sb.from("leads").delete().eq("id", id)); refresh(); },
+      watchMessages(cb, err){ return poll(async () => chk(await sb.from("messages").select("*").order("created_at", { ascending:false }).limit(1000)).map(mapMsg), cb, err); },
+      async updateMessage(id, p){ chk(await sb.from("messages").update(p).eq("id", id)); refresh(); },
+      async deleteMessage(id){ chk(await sb.from("messages").delete().eq("id", id)); refresh(); },
+      async saveSettings(s){ chk(await sb.from("settings").upsert({ id:1, data:s, updated_at:new Date().toISOString() })); refresh(); }
+    };
+  }
+
+  const apiReady = (async () => {
+    if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY){
+      try { return await makeSupabase(); } catch(e){ console.error("Supabase", e); return makeOffline(); }
+    }
+    if (window.claude && typeof window.claude.use === "function"){
+      const db = await window.claude.use("db");
+      if (db){ const user = await window.claude.use("user"); return makeArtifact(db, user); }
+      return makeOffline();
+    }
+    return makeDemo();
+  })();
+
+  /* ---------- site settings ---------- */
+  let settings = { ...DEFAULT_SETTINGS };
+  function applySettings(){
+    const ann = document.getElementById("ann");
+    const txt = (lang === "ru" ? settings.bannerRu : settings.bannerUz) || settings.bannerUz || settings.bannerRu;
+    ann.textContent = txt || "";
+    ann.hidden = !(settings.bannerOn && txt) || location.hash === "#admin";
+    const g = Math.max(1, parseInt(settings.goal, 10) || 500);
+    document.querySelectorAll(".goal").forEach(el => { el.textContent = g + "+"; });
+    const open = settings.formOpen !== false;
+    document.getElementById("form-closed").hidden = open;
+    if (!open){ document.getElementById("form-body").hidden = true; document.getElementById("success").hidden = true; }
+    else if (document.getElementById("success").hidden) document.getElementById("form-body").hidden = false;
+    const tgUser = String(settings.telegram || "").replace(/^https?:\/\/t\.me\//i, "").replace(/^@/, "").trim();
+    const rows = [];
+    if (settings.phone) rows.push(`<div><svg class="ico"><use href="#i-pin"/></svg><span>${esc(tx("phone"))}: <b style="user-select:all">${esc(settings.phone)}</b></span></div>`);
+    if (tgUser) rows.push(`<div><svg class="ico"><use href="#i-arrow"/></svg><span>${esc(tx("tg"))}: <a href="https://t.me/${encodeURIComponent(tgUser)}" target="_blank" rel="noopener">@${esc(tgUser)}</a></span></div>`);
+    document.getElementById("reach").innerHTML = rows.join("");
+    const f = [];
+    if (settings.phone) f.push(`<span style="user-select:all">${esc(settings.phone)}</span>`);
+    if (tgUser) f.push(`<a href="https://t.me/${encodeURIComponent(tgUser)}" target="_blank" rel="noopener">@${esc(tgUser)}</a>`);
+    document.getElementById("foot-reach").innerHTML = f.join("");
+  }
+  apiReady.then(a => a.watchSettings(s => { settings = { ...DEFAULT_SETTINGS, ...(s || {}) }; applySettings(); }));
+
+  /* ---------- waitlist form ---------- */
+  let role = "client";
+  const rc = document.getElementById("role-client"), rw = document.getElementById("role-worker");
+  function setRole(r){
+    role = r; rc.setAttribute("aria-pressed", r === "client"); rw.setAttribute("aria-pressed", r === "worker");
+    document.getElementById("skills-fld").hidden = r !== "worker";
+  }
+  rc.onclick = () => setRole("client"); rw.onclick = () => setRole("worker");
+  document.getElementById("cta-worker").addEventListener("click", () => setRole("worker"));
+  const form = document.getElementById("form"), nameI = document.getElementById("name"), phoneI = document.getElementById("phone");
+  phoneI.addEventListener("input", () => {
+    let d = phoneI.value.replace(/\D/g, "");
+    if (d.startsWith("998")) d = d.slice(3);
+    d = d.slice(0, 9);
+    const parts = [d.slice(0,2), d.slice(2,5), d.slice(5,7), d.slice(7,9)].filter(Boolean);
+    phoneI.value = d.length ? "+998 " + parts.join(" ") : "";
+  });
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const n = nameI.value.trim(), digits = phoneI.value.replace(/\D/g, "").replace(/^998/, "");
+    const okN = n.length > 1, okP = digits.length === 9;
+    nameI.setAttribute("aria-invalid", !okN); document.getElementById("name-err").hidden = okN;
+    phoneI.setAttribute("aria-invalid", !okP); document.getElementById("phone-err").hidden = okP;
+    if (!okN){ nameI.focus(); return; } if (!okP){ phoneI.focus(); return; }
+    const d = document.getElementById("district").value;
+    const skills = role === "worker" ? Array.from(document.querySelectorAll('input[name="skill"]:checked')).map(i => i.value) : [];
+    const btn = document.getElementById("submit-btn"), errBox = document.getElementById("form-err");
+    btn.disabled = true; btn.style.opacity = ".6"; errBox.hidden = true;
+    try {
+      const api = await apiReady;
+      await api.submitLead({ role, name:n.slice(0, 80), phone:phoneI.value, district:d, skills, lang });
+      const t = extra[lang];
+      document.getElementById("succ-title").textContent = t.succT.replace("{n}", n);
+      document.getElementById("succ-text").textContent = (role === "worker" ? t.succW : t.succC).replace("{p}", phoneI.value).replace("{d}", d);
+      document.getElementById("form-body").hidden = true;
+      document.getElementById("success").hidden = false;
+    } catch(err){
+      errBox.textContent = errText(err); errBox.hidden = false;
+    } finally { btn.disabled = false; btn.style.opacity = ""; }
+  });
+  document.getElementById("again").onclick = () => {
+    form.reset(); setRole("client");
+    document.getElementById("form-body").hidden = false; document.getElementById("success").hidden = true; nameI.focus();
+  };
+
+  /* ---------- contact form ---------- */
+  const cform = document.getElementById("cform");
+  cform.addEventListener("submit", async e => {
+    e.preventDefault();
+    const nI = document.getElementById("c-name"), cI = document.getElementById("c-contact"), tI = document.getElementById("c-text");
+    const v = { name:nI.value.trim(), contact:cI.value.trim(), text:tI.value.trim() };
+    const ok = { name:v.name.length > 1, contact:v.contact.length > 2, text:v.text.length > 1 };
+    [["c-name", ok.name, nI], ["c-contact", ok.contact, cI], ["c-text", ok.text, tI]].forEach(([id, good, el]) => { el.setAttribute("aria-invalid", !good); document.getElementById(id + "-err").hidden = good; });
+    if (!ok.name){ nI.focus(); return; } if (!ok.contact){ cI.focus(); return; } if (!ok.text){ tI.focus(); return; }
+    const btn = document.getElementById("c-submit"), errBox = document.getElementById("cform-err");
+    btn.disabled = true; btn.style.opacity = ".6"; errBox.hidden = true;
+    try {
+      const api = await apiReady;
+      await api.submitMessage({ name:v.name.slice(0, 80), contact:v.contact.slice(0, 80), text:v.text.slice(0, 2000) });
+      document.getElementById("cform-body").hidden = true; document.getElementById("c-success").hidden = false;
+    } catch(err){ errBox.textContent = errText(err); errBox.hidden = false; }
+    finally { btn.disabled = false; btn.style.opacity = ""; }
+  });
+  document.getElementById("c-again").onclick = () => { cform.reset(); document.getElementById("cform-body").hidden = false; document.getElementById("c-success").hidden = true; };
+
+  /* ======================================================
+     ADMIN PANEL  (#admin)
+     ====================================================== */
+  const T = {
+    uz:{ title:"Boshqaruv paneli", back:"Saytga qaytish", m_artifact:"Baza: Claude artifact", m_supabase:"Baza: Supabase", m_demo:"Demo · shu brauzerda", m_offline:"Baza ulanmagan",
+      tab_dash:"Umumiy koʻrinish", tab_leads:"Arizalar", tab_msgs:"Xabarlar", tab_set:"Sozlamalar",
+      kTotal:"Jami arizalar", kWorkers:"Ijrochilar", kClients:"Buyurtmachilar", kUnread:"Oʻqilmagan xabarlar", kWeek:"oxirgi 7 kunda: {n}", kGoal:"maqsad: {n}", kAll:"jami xabarlar: {n}",
+      chartT:"Arizalar, oxirgi 14 kun", distT:"Tumanlar boʻyicha", stT:"Holatlar", recentT:"Soʻnggi arizalar", nothing:"Hali maʼlumot yoʻq",
+      st_new:"Yangi", st_contacted:"Bogʻlanildi", st_verified:"Tasdiqlandi", st_rejected:"Rad etildi", role_client:"Buyurtmachi", role_worker:"Ijrochi",
+      search:"Ism, telefon yoki tuman…", allRoles:"Barcha rollar", allSt:"Barcha holatlar", export:"CSV yuklab olish", shown:"{n} ta koʻrsatilmoqda",
+      thDate:"Sana", thName:"Ism", thPhone:"Telefon", thRole:"Rol", thDist:"Tuman", thSkills:"Koʻnikmalar", thSt:"Holat", thNote:"Izoh", thAct:"",
+      notePh:"Izoh qoʻshing…", del:"Oʻchirish", confirm:"Tasdiqlang", deleted:"Oʻchirildi", saved:"Saqlandi", exported:"CSV saqlandi",
+      emptyLT:"Hali ariza yoʻq", emptyLP:"Saytdagi kutish roʻyxati formasidan kelgan arizalar shu yerda paydo boʻladi.", noMatch:"Filtrga mos ariza topilmadi",
+      emptyMT:"Xabarlar yoʻq", emptyMP:"«Aloqa» formasidan yuborilgan xabarlar shu yerda boʻladi.",
+      markRead:"Oʻqildi", markUnread:"Oʻqilmagan qilish", newB:"YANGI",
+      sBanner:"Saytdagi eʼlon", sBannerS:"Sahifa tepasidagi sariq satr", sBUz:"Eʼlon matni (UZ)", sBRu:"Eʼlon matni (RU)",
+      sOpen:"Arizalar qabul qilinadi", sOpenS:"Oʻchirilsa, forma oʻrnida «arizalar yopiq» xabari chiqadi",
+      sPhone:"Telefon raqam (saytda koʻrinadi)", sTg:"Telegram username", sGoal:"Ijrochilar maqsadi (saytdagi raqam)", save:"Saqlash",
+      bT:"Backend",
+      b_artifact:"Maʼlumotlar shu artifactning ichki bazasida saqlanmoqda. Arizalarni faqat siz va muharrirlar koʻradi; ariza yuborish uchun tashrifchi claude.ai hisobiga kirgan va sahifaga kamida Contributor huquqiga ega boʻlishi kerak. Saytni oʻz domeningizga joylashtirganda kod boshidagi <code>CONFIG</code> ga Supabase kalitlarini yozing: shunda istalgan tashrifchi ariza yubora oladi.",
+      b_supabase:"Maʼlumotlar Supabase loyihangizda saqlanmoqda. Yangi admin qoʻshish: Supabase → Authentication orqali foydalanuvchi yarating va uning id sini <code>admins</code> jadvaliga qoʻshing.",
+      b_demo:"Supabase sozlanmagan, shuning uchun demo rejim ishlamoqda: maʼlumotlar faqat shu brauzerda saqlanadi. Kod boshidagi <code>CONFIG</code> ga SUPABASE_URL va SUPABASE_ANON_KEY yozing.",
+      gLoad:"Yuklanmoqda…", gNoT:"Kirish yopiq", gNoP:"Admin panelni faqat sahifa egasi va muharrirlar koʻradi.", gOffP:"Bu koʻrinishda baza mavjud emas. claude.ai hisobingizga kirib, sahifani qayta oching.",
+      lT:"Admin sifatida kirish", lP:"Supabase’da yaratilgan admin hisobi bilan kiring.", email:"Email", pw:"Parol", login:"Kirish", logout:"Chiqish", lErr:"Email yoki parol notoʻgʻri.", notAdmin:"Bu hisob admin emas.",
+      errSave:"Saqlab boʻlmadi. Qayta urinib koʻring.", errRights:"Bu amal uchun huquqingiz yoʻq.", errLoad:"Maʼlumotlarni yuklab boʻlmadi." },
+    ru:{ title:"Панель управления", back:"Вернуться на сайт", m_artifact:"База: Claude artifact", m_supabase:"База: Supabase", m_demo:"Демо · в этом браузере", m_offline:"База не подключена",
+      tab_dash:"Обзор", tab_leads:"Заявки", tab_msgs:"Сообщения", tab_set:"Настройки",
+      kTotal:"Всего заявок", kWorkers:"Исполнители", kClients:"Заказчики", kUnread:"Непрочитанные сообщения", kWeek:"за 7 дней: {n}", kGoal:"цель: {n}", kAll:"всего сообщений: {n}",
+      chartT:"Заявки за последние 14 дней", distT:"По районам", stT:"Статусы", recentT:"Последние заявки", nothing:"Данных пока нет",
+      st_new:"Новая", st_contacted:"Связались", st_verified:"Проверен", st_rejected:"Отклонена", role_client:"Заказчик", role_worker:"Исполнитель",
+      search:"Имя, телефон или район…", allRoles:"Все роли", allSt:"Все статусы", export:"Скачать CSV", shown:"Показано: {n}",
+      thDate:"Дата", thName:"Имя", thPhone:"Телефон", thRole:"Роль", thDist:"Район", thSkills:"Навыки", thSt:"Статус", thNote:"Заметка", thAct:"",
+      notePh:"Добавить заметку…", del:"Удалить", confirm:"Подтвердите", deleted:"Удалено", saved:"Сохранено", exported:"CSV сохранён",
+      emptyLT:"Заявок пока нет", emptyLP:"Здесь появятся заявки из формы листа ожидания на сайте.", noMatch:"Под фильтр ничего не подходит",
+      emptyMT:"Сообщений нет", emptyMP:"Здесь появятся сообщения из формы «Связь».",
+      markRead:"Прочитано", markUnread:"Сделать непрочитанным", newB:"НОВОЕ",
+      sBanner:"Объявление на сайте", sBannerS:"Жёлтая строка вверху страницы", sBUz:"Текст объявления (UZ)", sBRu:"Текст объявления (RU)",
+      sOpen:"Приём заявок открыт", sOpenS:"Если выключить, вместо формы появится сообщение «приём закрыт»",
+      sPhone:"Телефон (виден на сайте)", sTg:"Telegram username", sGoal:"Цель по исполнителям (число на сайте)", save:"Сохранить",
+      bT:"Бэкенд",
+      b_artifact:"Данные хранятся во встроенной базе этого артефакта. Заявки видите только вы и редакторы; чтобы отправить заявку, посетитель должен войти в claude.ai и иметь на странице право не ниже Contributor. Когда разместите сайт на своём домене, впишите ключи Supabase в <code>CONFIG</code> в начале кода: тогда заявку сможет отправить любой посетитель.",
+      b_supabase:"Данные хранятся в вашем проекте Supabase. Новый админ: создайте пользователя в Supabase → Authentication и добавьте его id в таблицу <code>admins</code>.",
+      b_demo:"Supabase не настроен, поэтому работает демо-режим: данные хранятся только в этом браузере. Впишите SUPABASE_URL и SUPABASE_ANON_KEY в <code>CONFIG</code> в начале кода.",
+      gLoad:"Загрузка…", gNoT:"Доступ закрыт", gNoP:"Админ-панель видят только владелец страницы и редакторы.", gOffP:"В этом режиме база недоступна. Войдите в claude.ai и откройте страницу заново.",
+      lT:"Вход для администратора", lP:"Войдите с админ-аккаунтом, созданным в Supabase.", email:"Email", pw:"Пароль", login:"Войти", logout:"Выйти", lErr:"Неверный email или пароль.", notAdmin:"Этот аккаунт не администратор.",
+      errSave:"Не удалось сохранить. Попробуйте ещё раз.", errRights:"Нет прав на это действие.", errLoad:"Не удалось загрузить данные." }
+  };
+  const t = (k, n) => { const s = (T[lang] || T.uz)[k] || T.uz[k] || k; return n == null ? s : s.replace("{n}", n); };
+  const skillLabel = s => { const i = SKILLS.indexOf(s); return i < 0 ? s : ((lang === "ru" ? RU : UZ)["sk" + (i + 1)] || s); };
+  const two = n => String(n).padStart(2, "0");
+  const fmtDate = ms => { const d = new Date(ms); return isNaN(d) ? "—" : `${two(d.getDate())}.${two(d.getMonth() + 1)}.${d.getFullYear()} ${two(d.getHours())}:${two(d.getMinutes())}`; };
+  const admErr = e => (e && (e.code === "invalid_argument" || e.code === "42501")) ? t("errRights") : t("errSave");
+
+  const A = { api:null, ok:false, tab:"dash", leads:[], msgs:[], q:"", fRole:"", fSt:"", unsub:[], pending:false, loginErr:"" };
+  const root = document.getElementById("adm-root");
+  const admEl = document.getElementById("admin");
+
+  function stopSubs(){ A.unsub.forEach(f => { try { f(); } catch(e){} }); A.unsub = []; }
+  async function openAdmin(){
+    root.innerHTML = `<div class="gate"><p>${esc(t("gLoad"))}</p></div>`;
+    A.api = await apiReady;
+    A.ok = A.api.isAdmin ? await A.api.isAdmin() : false;
+    if (location.hash !== "#admin") return;
+    if (!A.ok){ renderGate(); return; }
+    stopSubs();
+    const onErr = () => snack(t("errLoad"));
+    A.unsub.push(A.api.watchLeads(list => { A.leads = list || []; dataChanged(); }, onErr));
+    A.unsub.push(A.api.watchMessages(list => { A.msgs = list || []; dataChanged(); }, onErr));
+    renderApp();
+  }
+  function closeAdmin(){ stopSubs(); }
+
+  function renderGate(){
+    const m = A.api.mode;
+    if (m === "supabase"){
+      root.innerHTML = `<form class="gate" id="login-form" novalidate>
+        <h2>${esc(t("lT"))}</h2><p>${esc(t("lP"))}</p>
+        <div class="fld"><label for="l-email">${esc(t("email"))}</label><input id="l-email" type="email" autocomplete="username"></div>
+        <div class="fld"><label for="l-pw">${esc(t("pw"))}</label><input id="l-pw" type="password" autocomplete="current-password"></div>
+        ${A.loginErr ? `<div class="form-err">${esc(A.loginErr)}</div>` : ""}
+        <button class="btn btn-ink" type="submit">${esc(t("login"))}</button>
+        ${A.loginErr === t("notAdmin") ? `<button type="button" class="icon-btn" data-act="logout">${esc(t("logout"))}</button>` : ""}
+        <a class="icon-btn" href="#top" style="justify-self:start">← ${esc(t("back"))}</a>
+      </form>`;
+      return;
+    }
+    root.innerHTML = `<div class="gate"><h2>${esc(t("gNoT"))}</h2><p>${esc(m === "offline" ? t("gOffP") : t("gNoP"))}</p><a class="btn btn-ink" href="#top">${esc(t("back"))}</a></div>`;
+  }
+
+  const unreadCount = () => A.msgs.filter(m => !m.read).length;
+  function renderApp(){
+    const tabs = ["dash", "leads", "msgs", "set"];
+    const cnt = { leads:A.leads.length, msgs:unreadCount() };
+    root.innerHTML = `
+      <div class="adm-head">
+        <div style="display:grid;gap:10px"><span class="eyebrow">Qoʻlda admin</span><h1>${esc(t("title"))}</h1></div>
+        <div class="meta">
+          <span class="mode ${A.api.mode === "demo" ? "demo" : ""}">${esc(t("m_" + A.api.mode))}</span>
+          ${A.api.mode === "supabase" ? `<button class="btn btn-sm btn-line" data-act="logout">${esc(t("logout"))}</button>` : ""}
+          <a class="btn btn-sm btn-ink" href="#top">${esc(t("back"))}</a>
+        </div>
+      </div>
+      <div class="adm-shell">
+        <nav class="adm-side" role="tablist">
+          ${tabs.map(k => `<button role="tab" data-tab="${k}" aria-selected="${A.tab === k}">${esc(t("tab_" + k))}${cnt[k] != null ? `<span class="cnt" id="cnt-${k}">${cnt[k]}</span>` : ""}</button>`).join("")}
+        </nav>
+        <div class="adm-main" id="adm-main"></div>
+      </div>`;
+    renderTab();
+  }
+  function renderTab(){
+    const main = document.getElementById("adm-main"); if (!main) return;
+    if (A.tab === "dash") main.innerHTML = viewDash();
+    if (A.tab === "leads"){ main.innerHTML = viewLeadsShell(); fillLeads(); }
+    if (A.tab === "msgs") main.innerHTML = viewMsgs();
+    if (A.tab === "set") main.innerHTML = viewSettings();
+  }
+  function dataChanged(){
+    if (admEl.hidden || !A.ok) return;
+    const cl = document.getElementById("cnt-leads"), cm = document.getElementById("cnt-msgs");
+    if (cl) cl.textContent = A.leads.length; if (cm) cm.textContent = unreadCount();
+    if (A.tab === "dash" || A.tab === "msgs") renderTab();
+    if (A.tab === "leads"){
+      if (document.activeElement && document.activeElement.classList.contains("note-in")) A.pending = true;
+      else fillLeads();
+    }
+  }
+
+  /* ---- dashboard ---- */
+  function viewDash(){
+    const L = A.leads, now = Date.now(), DAY = 864e5;
+    const workers = L.filter(l => l.role === "worker").length, clients = L.length - workers;
+    const week = L.filter(l => now - l.createdAt < 7 * DAY).length;
+    const goal = Math.max(1, parseInt(settings.goal, 10) || 500);
+    const pct = Math.min(100, Math.round(workers / goal * 100));
+    // 14-day series
+    const start = new Date(); start.setHours(0, 0, 0, 0);
+    const days = []; for (let i = 13; i >= 0; i--) days.push(new Date(start.getTime() - i * DAY));
+    const series = days.map(d => L.filter(l => l.createdAt >= d.getTime() && l.createdAt < d.getTime() + DAY).length);
+    const max = Math.max(1, ...series);
+    const W = 560, H = 200, P = { l:30, r:8, t:14, b:26 }, bw = (W - P.l - P.r) / 14;
+    const ticks = max <= 4 ? Array.from({ length:max + 1 }, (_, i) => i) : [0, Math.round(max / 2), max];
+    const y = v => P.t + (H - P.t - P.b) * (1 - v / max);
+    const svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("chartT"))}">
+      ${ticks.map(v => `<line x1="${P.l}" x2="${W - P.r}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(--line)" stroke-width="1"/><text x="${P.l - 8}" y="${y(v) + 4}" text-anchor="end" style="fill:var(--muted);font:11px var(--f-mono)">${v}</text>`).join("")}
+      ${series.map((v, i) => { const x = P.l + i * bw + bw * .18, w = bw * .64, top = y(v); return `<rect x="${x}" y="${v ? top : y(0) - 2}" width="${w}" height="${v ? y(0) - top : 2}" rx="4" style="fill:${i === 13 ? "var(--mint)" : (v ? "var(--teal)" : "var(--paper-2)")}"><title>${two(days[i].getDate())}.${two(days[i].getMonth() + 1)}: ${v}</title></rect>`; }).join("")}
+      ${days.map((d, i) => i % 2 === 1 || i === 13 ? `<text x="${P.l + i * bw + bw / 2}" y="${H - 8}" text-anchor="middle" style="fill:var(--muted);font:10.5px var(--f-mono)">${two(d.getDate())}.${two(d.getMonth() + 1)}</text>` : "").join("")}
+    </svg>`;
+    const dist = {}; L.forEach(l => { dist[l.district] = (dist[l.district] || 0) + 1; });
+    const distRows = Object.entries(dist).sort((a, b) => b[1] - a[1]).slice(0, 7);
+    const dmax = Math.max(1, ...distRows.map(r => r[1]));
+    const stc = STATUSES.map(s => [s, L.filter(l => (l.status || "new") === s).length]);
+    return `
+      <div class="kpis">
+        <div class="kpi-t"><small>${esc(t("kTotal"))}</small><b>${L.length}</b><em>${esc(t("kWeek", week))}</em></div>
+        <div class="kpi-t"><small>${esc(t("kWorkers"))}</small><b>${workers}</b><div class="meter" title="${pct}%"><i style="width:${pct}%"></i></div><em>${esc(t("kGoal", goal))} · ${pct}%</em></div>
+        <div class="kpi-t"><small>${esc(t("kClients"))}</small><b>${clients}</b></div>
+        <div class="kpi-t"><small>${esc(t("kUnread"))}</small><b>${unreadCount()}</b><em>${esc(t("kAll", A.msgs.length))}</em></div>
+      </div>
+      <div class="grid2">
+        <div class="panel chart"><div class="panel-h"><h3>${esc(t("chartT"))}</h3></div>${svg}</div>
+        <div class="panel"><div class="panel-h"><h3>${esc(t("distT"))}</h3></div>
+          ${distRows.length ? `<div class="hbars">${distRows.map(([k, v]) => `<div class="hbar"><span title="${esc(k)}">${esc(k)}</span><span class="t"><i style="width:${v / dmax * 100}%"></i></span><span>${v}</span></div>`).join("")}</div>` : `<p style="color:var(--muted)">${esc(t("nothing"))}</p>`}
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><div class="panel-h"><h3>${esc(t("recentT"))}</h3></div>
+          ${L.length ? `<div class="recent">${L.slice(0, 6).map(l => `<div><span><b>${esc(l.name)}</b> · <span class="role ${l.role === "worker" ? "worker" : "client"}">${esc(t("role_" + (l.role === "worker" ? "worker" : "client")))}</span></span><small>${fmtDate(l.createdAt)}</small></div>`).join("")}</div>` : `<p style="color:var(--muted)">${esc(t("nothing"))}</p>`}
+        </div>
+        <div class="panel"><div class="panel-h"><h3>${esc(t("stT"))}</h3></div>
+          <div class="st-pills">${stc.map(([s, n]) => `<span class="st st-${s}" style="cursor:default">${esc(t("st_" + s))} · ${n}</span>`).join("")}</div>
+        </div>
+      </div>`;
+  }
+
+  /* ---- leads ---- */
+  function viewLeadsShell(){
+    return `<div class="toolbar">
+        <input type="search" id="lq" placeholder="${esc(t("search"))}" value="${esc(A.q)}" aria-label="${esc(t("search"))}">
+        <select id="lrole" aria-label="${esc(t("thRole"))}"><option value="">${esc(t("allRoles"))}</option><option value="client" ${A.fRole === "client" ? "selected" : ""}>${esc(t("role_client"))}</option><option value="worker" ${A.fRole === "worker" ? "selected" : ""}>${esc(t("role_worker"))}</option></select>
+        <select id="lst" aria-label="${esc(t("thSt"))}"><option value="">${esc(t("allSt"))}</option>${STATUSES.map(s => `<option value="${s}" ${A.fSt === s ? "selected" : ""}>${esc(t("st_" + s))}</option>`).join("")}</select>
+        <button class="btn btn-sm btn-line" data-act="export">${esc(t("export"))}</button>
+      </div>
+      <div id="lead-list"></div>`;
+  }
+  function filteredLeads(){
+    const q = A.q.trim().toLowerCase();
+    return A.leads.filter(l =>
+      (!A.fRole || l.role === A.fRole) && (!A.fSt || (l.status || "new") === A.fSt) &&
+      (!q || [l.name, l.phone, l.district, l.note].join(" ").toLowerCase().includes(q)));
+  }
+  function fillLeads(){
+    const box = document.getElementById("lead-list"); if (!box) return;
+    A.pending = false;
+    if (!A.leads.length){ box.innerHTML = `<div class="tbl-wrap"><div class="empty"><b>${esc(t("emptyLT"))}</b><span>${esc(t("emptyLP"))}</span></div></div>`; return; }
+    const rows = filteredLeads();
+    if (!rows.length){ box.innerHTML = `<div class="tbl-wrap"><div class="empty"><b>${esc(t("noMatch"))}</b></div></div>`; return; }
+    box.innerHTML = `<p style="font-size:13px;color:var(--muted);margin:0 0 8px">${esc(t("shown", rows.length))}</p><div class="tbl-wrap"><table class="tbl"><thead><tr>
+      <th>${esc(t("thDate"))}</th><th>${esc(t("thName"))}</th><th>${esc(t("thPhone"))}</th><th>${esc(t("thRole"))}</th><th>${esc(t("thDist"))}</th><th>${esc(t("thSkills"))}</th><th>${esc(t("thSt"))}</th><th>${esc(t("thNote"))}</th><th></th>
+    </tr></thead><tbody>${rows.map(l => {
+      const st = STATUSES.includes(l.status) ? l.status : "new", r = l.role === "worker" ? "worker" : "client";
+      return `<tr data-id="${esc(l.id)}">
+        <td class="mono">${fmtDate(l.createdAt)}</td>
+        <td><b>${esc(l.name)}</b>${l.lang ? ` <span class="mono" style="color:var(--muted)">${esc(String(l.lang).toUpperCase())}</span>` : ""}</td>
+        <td class="mono" style="user-select:all">${esc(l.phone)}</td>
+        <td><span class="role ${r}">${esc(t("role_" + r))}</span></td>
+        <td>${esc(l.district)}</td>
+        <td class="sk">${(l.skills || []).map(s => esc(skillLabel(s))).join(", ") || "—"}</td>
+        <td><select class="st st-${st}" data-act="status" aria-label="${esc(t("thSt"))}">${STATUSES.map(s => `<option value="${s}" ${s === st ? "selected" : ""}>${esc(t("st_" + s))}</option>`).join("")}</select></td>
+        <td><input class="note-in" data-act="note" value="${esc(l.note || "")}" placeholder="${esc(t("notePh"))}" aria-label="${esc(t("thNote"))}" maxlength="300"></td>
+        <td><button class="icon-btn danger" data-act="del-lead">${esc(t("del"))}</button></td>
+      </tr>`; }).join("")}</tbody></table></div>`;
+  }
+  async function exportCsv(){
+    const rows = filteredLeads();
+    const q = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+    const head = [t("thDate"), t("thName"), t("thPhone"), t("thRole"), t("thDist"), t("thSkills"), t("thSt"), t("thNote"), "Lang"];
+    const body = rows.map(l => [fmtDate(l.createdAt), l.name, l.phone, t("role_" + (l.role === "worker" ? "worker" : "client")), l.district, (l.skills || []).map(skillLabel).join("; "), t("st_" + (l.status || "new")), l.note || "", l.lang || ""]);
+    const csv = "﻿" + [head, ...body].map(r => r.map(q).join(",")).join("\r\n");
+    const d = new Date(), filename = `qolda-arizalar-${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}.csv`;
+    const dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null;
+    if (dl){
+      try { await dl.save({ filename, data:csv }); snack(t("exported")); } catch(e){ if (e && e.code !== "declined") snack(t("errSave")); }
+      return;
+    }
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type:"text/csv;charset=utf-8" })); a.download = filename;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+
+  /* ---- messages ---- */
+  function viewMsgs(){
+    if (!A.msgs.length) return `<div class="panel"><div class="empty"><b>${esc(t("emptyMT"))}</b><span>${esc(t("emptyMP"))}</span></div></div>`;
+    return `<div class="msgs">${A.msgs.map(m => `<article class="msg" data-id="${esc(m.id)}">
+      <div class="msg-top">${m.read ? "" : `<span class="new">${esc(t("newB"))}</span>`}<b>${esc(m.name)}</b><span style="user-select:all">${esc(m.contact)}</span><span class="mono">${fmtDate(m.createdAt)}</span></div>
+      <p>${esc(m.text)}</p>
+      <div class="acts"><button class="icon-btn" data-act="toggle-read">${esc(m.read ? t("markUnread") : t("markRead"))}</button><button class="icon-btn danger" data-act="del-msg">${esc(t("del"))}</button></div>
+    </article>`).join("")}</div>`;
+  }
+
+  /* ---- settings ---- */
+  function viewSettings(){
+    const s = settings;
+    return `<form class="panel set-form" id="set-form" novalidate>
+        <h3>${esc(t("tab_set"))}</h3>
+        <div class="toggle"><span><b>${esc(t("sOpen"))}</b><span>${esc(t("sOpenS"))}</span></span><label class="switch"><input type="checkbox" id="s-open" ${s.formOpen !== false ? "checked" : ""} aria-label="${esc(t("sOpen"))}"><i></i></label></div>
+        <div class="toggle"><span><b>${esc(t("sBanner"))}</b><span>${esc(t("sBannerS"))}</span></span><label class="switch"><input type="checkbox" id="s-banner" ${s.bannerOn ? "checked" : ""} aria-label="${esc(t("sBanner"))}"><i></i></label></div>
+        <div class="row2">
+          <div class="fld"><label for="s-buz">${esc(t("sBUz"))}</label><input id="s-buz" maxlength="160" value="${esc(s.bannerUz)}"></div>
+          <div class="fld"><label for="s-bru">${esc(t("sBRu"))}</label><input id="s-bru" maxlength="160" value="${esc(s.bannerRu)}"></div>
+        </div>
+        <div class="row2">
+          <div class="fld"><label for="s-phone">${esc(t("sPhone"))}</label><input id="s-phone" maxlength="40" value="${esc(s.phone)}" placeholder="+998 90 123 45 67"></div>
+          <div class="fld"><label for="s-tg">${esc(t("sTg"))}</label><input id="s-tg" maxlength="60" value="${esc(s.telegram)}" placeholder="@qolda_uz"></div>
+        </div>
+        <div class="fld" style="max-width:260px"><label for="s-goal">${esc(t("sGoal"))}</label><input id="s-goal" type="number" min="1" max="100000" value="${esc(s.goal)}"></div>
+        <button class="btn btn-ink" type="submit" style="justify-self:start">${esc(t("save"))}</button>
+      </form>
+      <div class="panel"><h3>${esc(t("bT"))}</h3><p class="set-note">${t("b_" + A.api.mode)}</p></div>`;
+  }
+
+  /* ---- events ---- */
+  root.addEventListener("click", async e => {
+    const tab = e.target.closest("[data-tab]");
+    if (tab){ A.tab = tab.dataset.tab; root.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", b === tab)); renderTab(); return; }
+    const b = e.target.closest("[data-act]"); if (!b) return;
+    const act = b.dataset.act;
+    try {
+      if (act === "logout"){ await A.api.logout(); A.loginErr = ""; A.ok = false; stopSubs(); renderGate(); return; }
+      if (act === "export"){ await exportCsv(); return; }
+      if (act === "del-lead" || act === "del-msg"){
+        if (!b.classList.contains("armed")){ b.classList.add("armed"); b.textContent = t("confirm"); setTimeout(() => { if (b.isConnected){ b.classList.remove("armed"); b.textContent = t("del"); } }, 3000); return; }
+        const id = b.closest("[data-id]").dataset.id;
+        b.disabled = true;
+        if (act === "del-lead") await A.api.deleteLead(id); else await A.api.deleteMessage(id);
+        snack(t("deleted")); return;
+      }
+      if (act === "toggle-read"){
+        const id = b.closest("[data-id]").dataset.id, m = A.msgs.find(x => x.id === id);
+        b.disabled = true; await A.api.updateMessage(id, { read: !(m && m.read) }); return;
+      }
+    } catch(err){ snack(admErr(err)); b.disabled = false; }
+  });
+  root.addEventListener("change", async e => {
+    const el = e.target;
+    if (el.id === "lrole"){ A.fRole = el.value; fillLeads(); return; }
+    if (el.id === "lst"){ A.fSt = el.value; fillLeads(); return; }
+    const act = el.dataset && el.dataset.act; if (!act) return;
+    const id = el.closest("[data-id]").dataset.id;
+    try {
+      if (act === "status"){ el.className = "st st-" + el.value; await A.api.updateLead(id, { status:el.value }); snack(t("saved")); }
+      if (act === "note"){ const v = el.value.trim().slice(0, 300); const l = A.leads.find(x => x.id === id); if (l && (l.note || "") === v) return; await A.api.updateLead(id, { note:v }); snack(t("saved")); }
+    } catch(err){ snack(admErr(err)); }
+  });
+  root.addEventListener("input", e => { if (e.target.id === "lq"){ A.q = e.target.value; fillLeads(); } });
+  root.addEventListener("keydown", e => { if (e.target.classList && e.target.classList.contains("note-in") && e.key === "Enter"){ e.preventDefault(); e.target.blur(); } });
+  root.addEventListener("focusout", e => { if (e.target.classList && e.target.classList.contains("note-in") && A.pending) setTimeout(() => { if (!(document.activeElement && document.activeElement.classList.contains("note-in"))) fillLeads(); }, 50); });
+  root.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (e.target.id === "login-form"){
+      const em = document.getElementById("l-email").value.trim(), pw = document.getElementById("l-pw").value;
+      try { await A.api.login(em, pw); } catch(err){ A.loginErr = t("lErr"); renderGate(); return; }
+      if (!(await A.api.isAdmin())){ A.loginErr = t("notAdmin"); renderGate(); return; }
+      A.loginErr = ""; openAdmin(); return;
+    }
+    if (e.target.id === "set-form"){
+      const v = id => document.getElementById(id);
+      const next = {
+        formOpen: v("s-open").checked, bannerOn: v("s-banner").checked,
+        bannerUz: v("s-buz").value.trim().slice(0, 160), bannerRu: v("s-bru").value.trim().slice(0, 160),
+        phone: v("s-phone").value.trim().slice(0, 40), telegram: v("s-tg").value.trim().slice(0, 60),
+        goal: Math.min(100000, Math.max(1, parseInt(v("s-goal").value, 10) || 500))
+      };
+      const btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
+      try { await A.api.saveSettings(next); settings = { ...DEFAULT_SETTINGS, ...next }; applySettings(); snack(t("saved")); }
+      catch(err){ snack(admErr(err)); }
+      finally { btn.disabled = false; }
+    }
+  });
+
+  /* ---- routing ---- */
+  const mainEl = document.querySelector("main"), footEl = document.querySelector("footer.foot");
+  function route(){
+    const adm = location.hash === "#admin";
+    const was = !admEl.hidden;
+    mainEl.hidden = adm; footEl.hidden = adm; admEl.hidden = !adm;
+    applySettings();
+    if (adm && !was){ window.scrollTo(0, 0); openAdmin(); }
+    if (!adm && was){ closeAdmin(); const tgt = location.hash.length > 1 && document.getElementById(location.hash.slice(1)); if (tgt) tgt.scrollIntoView(); }
+  }
+  window.addEventListener("hashchange", route);
+  onLangChange.push(() => { if (!admEl.hidden){ if (A.ok) renderApp(); else if (A.api) renderGate(); } applySettings(); });
+
+  /* ---------- hero map canvas ---------- */
+  const cv = document.getElementById("map"), ctx = cv.getContext("2d");
+  let W = 0, H = 0, dpr = 1, roads = [], blocks = [], workers = [], t0 = performance.now(), link = 0, linkStart = 0;
+  function rng(seed){ return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
+  function layout(){
+    const r = cv.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const R = rng(42); roads = []; blocks = [];
+    const cols = 6, rows = 6;
+    const xs = [], ys = [];
+    for (let i = 0; i <= cols; i++) xs.push(i / cols * W + (R() - .5) * W * .06);
+    for (let j = 0; j <= rows; j++) ys.push(j / rows * H + (R() - .5) * H * .06);
+    xs.forEach((x, i) => roads.push({ x1:x, y1:0, x2:x + (R() - .5) * 30, y2:H, w: i % 3 === 0 ? 3 : 1.4 }));
+    ys.forEach((y, j) => roads.push({ x1:0, y1:y, x2:W, y2:y + (R() - .5) * 30, w: j % 3 === 0 ? 3 : 1.4 }));
+    roads.push({ x1:0, y1:H * .9, x2:W, y2:H * .1, w:4, main:true });
+    for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) if (R() > .72) blocks.push({ x:xs[i] + 8, y:ys[j] + 8, w:xs[i + 1] - xs[i] - 16, h:ys[j + 1] - ys[j] - 16 });
+    workers = [];
+    for (let k = 0; k < 9; k++){
+      const a = R() * Math.PI * 2, d = .2 + R() * .32;
+      workers.push({ bx: W / 2 + Math.cos(a) * W * d, by: H / 2 + Math.sin(a) * H * d, ph: R() * 6.28, sp: .3 + R() * .5, amp: 6 + R() * 12 });
+    }
+    linkStart = performance.now();
+  }
+  function frame(now){
+    const t = (now - t0) / 1000;
+    ctx.clearRect(0, 0, W, H);
+    // blocks
+    ctx.fillStyle = "rgba(232,246,241,0.035)";
+    blocks.forEach(b => { if (b.w > 0 && b.h > 0){ ctx.beginPath(); ctx.roundRect ? ctx.roundRect(b.x, b.y, b.w, b.h, 6) : ctx.rect(b.x, b.y, b.w, b.h); ctx.fill(); } });
+    // roads
+    roads.forEach(r => { ctx.strokeStyle = r.main ? "rgba(34,199,158,0.16)" : "rgba(232,246,241,0.07)"; ctx.lineWidth = r.w; ctx.beginPath(); ctx.moveTo(r.x1, r.y1); ctx.lineTo(r.x2, r.y2); ctx.stroke(); });
+    const cx = W / 2, cy = H / 2;
+    // radar rings
+    for (let k = 0; k < 3; k++){
+      const p = ((t * .35 + k / 3) % 1), rad = p * Math.min(W, H) * .55;
+      ctx.strokeStyle = "rgba(34,199,158," + (0.35 * (1 - p)) + ")"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.stroke();
+    }
+    // workers
+    const pos = workers.map(w => ({ x: w.bx + Math.cos(t * w.sp + w.ph) * w.amp, y: w.by + Math.sin(t * w.sp * .8 + w.ph) * w.amp }));
+    const el = Math.max(0, now - linkStart) / 1000, cycle = 3.2;
+    const idx = Math.floor(el / cycle) % workers.length, prog = (el % cycle) / cycle;
+    const lp = pos[idx];
+    ctx.setLineDash([5, 6]); ctx.lineDashOffset = -t * 18;
+    ctx.strokeStyle = "rgba(34,199,158," + (0.75 * Math.sin(prog * Math.PI)) + ")"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(lp.x, lp.y); ctx.lineTo(cx, cy); ctx.stroke(); ctx.setLineDash([]);
+    pos.forEach((p, i) => {
+      const on = i === idx;
+      ctx.fillStyle = on ? "rgba(34,199,158,0.22)" : "rgba(232,246,241,0.08)";
+      ctx.beginPath(); ctx.arc(p.x, p.y, on ? 14 : 10, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = on ? "#22c79e" : "#93bdb3";
+      ctx.beginPath(); ctx.arc(p.x, p.y, on ? 5.5 : 4, 0, Math.PI * 2); ctx.fill();
+    });
+    // me
+    ctx.fillStyle = "rgba(255,196,92,0.25)"; ctx.beginPath(); ctx.arc(cx, cy, 16 + Math.sin(t * 3) * 2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#ffc45c"; ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.fill();
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  layout();
+  if (window.ResizeObserver) new ResizeObserver(() => { layout(); if (reduce) frame(performance.now()); }).observe(cv);
+  requestAnimationFrame(frame);
+
+  /* ---------- init ---------- */
+  let saved = "uz"; try { saved = localStorage.getItem("qolda-lang") || "uz"; } catch(e){}
+  setLang(saved);
+  route();
+})();
+</script>
+
+</body>
+</html>
