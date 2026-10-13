@@ -40,14 +40,21 @@ Admin panel: `sayt-manzili/#admin`.
    </head><body>
    ```
    oxiriga esa `</body></html>`.
-6. **GitHub Pages** — repo → Settings → Pages → Branch: `main` / root.
+6. **GitHub Pages** — repo → Settings → Pages → Branch: `master` / root.
 7. Tekshirish: saytda ariza qoldiring → `/#admin` → email/parol bilan kiring.
+
+## Ariza maydonlari
+
+- **Buyurtmachi**: ism, telefon, tuman, **ish turi** (mebel yigʻish, kichik taʼmirlash, navbatda turish, bogʻ ishlari, yuk koʻtarish, tozalash, boshqa), **ish tavsifi** va **taklif narxi** (10 000 – 10 000 000 soʻm).
+- **Ijrochi**: ism, telefon, tuman, bajara oladigan ishlar (koʻnikmalar).
+
+Avvalgi versiyadagi `supabase-schema.sql` ni ishga tushirgan boʻlsangiz, yangisini qayta ishga tushiring: u yangi ustunlarni (`category`, `task`, `price`) qoʻshadi, mavjud maʼlumotlarga tegmaydi.
 
 ## Admin panel imkoniyatlari
 
 - **Umumiy koʻrinish**: jami arizalar, ijrochilar maqsadga nisbatan, buyurtmachilar,
-  oʻqilmagan xabarlar, 14 kunlik grafik, tumanlar, holatlar, soʻnggi arizalar.
-- **Arizalar**: qidiruv, rol/holat boʻyicha filtr, holatni oʻzgartirish
+  oʻqilmagan xabarlar, oʻrtacha narx va buyurtmalar summasi, ish turlari boʻyicha soni va oʻrtacha narxi, 14 kunlik grafik, tumanlar, holatlar, soʻnggi arizalar.
+- **Arizalar**: qidiruv, rol/holat/ish turi boʻyicha filtr, ish turi, tavsif va narx ustunlari, holatni oʻzgartirish
   (Yangi → Bogʻlanildi → Tasdiqlandi / Rad etildi), izoh, oʻchirish (ikki bosqichli), CSV eksport.
 - **Xabarlar**: «Aloqa» formasidan kelgan xabarlar, oʻqildi belgisi, oʻchirish.
 - **Sozlamalar**: saytdagi sariq eʼlon (UZ/RU), arizalarni ochish/yopish,

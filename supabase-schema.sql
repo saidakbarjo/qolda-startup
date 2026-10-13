@@ -14,11 +14,27 @@ create table if not exists public.leads (
   district    text not null check (char_length(district) between 2 and 40),
   skills      text[] not null default '{}'
               check (skills <@ array['furniture','repair','queue','garden','moving','cleaning']::text[]),
+  category    text check (category in ('furniture','repair','queue','garden','moving','cleaning','other')),
+  task        text not null default '' check (char_length(task) <= 300),
+  price       integer check (price between 10000 and 10000000),
   lang        text not null default 'uz' check (lang in ('uz','ru')),
   status      text not null default 'new' check (status in ('new','contacted','verified','rejected')),
   note        text not null default '' check (char_length(note) <= 300)
 );
 create index if not exists leads_created_at_idx on public.leads (created_at desc);
+
+-- Upgrade for databases created with the first version of this file
+alter table public.leads add column if not exists category text
+  check (category in ('furniture','repair','queue','garden','moving','cleaning','other'));
+alter table public.leads add column if not exists task text not null default ''
+  check (char_length(task) <= 300);
+alter table public.leads add column if not exists price integer
+  check (price between 10000 and 10000000);
+
+-- A customer (client) must say what job they need and what they offer to pay
+alter table public.leads drop constraint if exists leads_client_job;
+alter table public.leads add constraint leads_client_job
+  check (role = 'worker' or (category is not null and price is not null)) not valid;
 
 create table if not exists public.messages (
   id          uuid primary key default gen_random_uuid(),

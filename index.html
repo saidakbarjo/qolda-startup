@@ -365,6 +365,13 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .skills span{display:inline-block;padding:8px 13px;border-radius:999px;background:var(--paper);font-size:14px;cursor:pointer;transition:background .15s}
 .skills input:checked + span{background:var(--ink);color:var(--on-dark)}
 .skills input:focus-visible + span{outline:3px solid var(--mint);outline-offset:2px}
+.lbl{font-size:14px;font-weight:600}
+.money{position:relative}
+.money input{padding-right:64px!important;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.money span{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+.form .presets button{background:var(--paper);box-shadow:none;font-family:var(--f-mono);font-size:13px}
+.form .presets button:hover{box-shadow:inset 0 0 0 1px var(--teal)}
+.hbar.wide{grid-template-columns:minmax(0,130px) 1fr 30px 112px}
 .form-err{background:#fbe1da;color:#8f3520;border-radius:10px;padding:11px 14px;font-size:14px}
 .fld textarea{width:100%;border:0;background:var(--paper);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);resize:vertical;min-height:120px;font-family:inherit}
 .fld textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--mint)}
@@ -400,6 +407,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .cnt{font-family:var(--f-mono);font-size:12px;padding:2px 8px;border-radius:999px;background:var(--paper-2);color:var(--text)}
 .adm-side button[aria-selected="true"] .cnt{background:var(--mint);color:var(--ink)}
 .adm-main{min-width:0;display:grid;gap:14px}
+.adm-main > *{min-width:0}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .kpi-t{background:var(--white);border-radius:var(--r-md);padding:20px;display:grid;gap:8px;align-content:start;min-width:0}
 .kpi-t small{color:var(--muted);font-size:13.5px}
@@ -431,7 +439,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .btn-sm{padding:11px 16px;font-size:14px}
 .btn-line{background:var(--white);color:var(--text);box-shadow:inset 0 0 0 1px var(--line)}
 .tbl-wrap{overflow-x:auto;background:var(--white);border-radius:var(--r-md)}
-table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:1080px}
 .tbl th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px;border-bottom:1px solid var(--line);white-space:nowrap}
 .tbl td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
 .tbl tr:last-child td{border-bottom:0}
@@ -872,6 +880,37 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
             </select>
           </div>
         </div>
+        <div id="job-fld" style="display:grid;gap:18px">
+          <div class="fld">
+            <span class="lbl" id="job-lbl" data-i="fJob">Qanday ish kerak?</span>
+            <div class="skills" role="radiogroup" aria-labelledby="job-lbl">
+              <label><input type="radio" name="job" value="furniture" id="jb-furniture"><span data-i="sk1">Mebel yigʻish</span></label>
+              <label><input type="radio" name="job" value="repair" id="jb-repair"><span data-i="sk2">Kichik taʼmirlash</span></label>
+              <label><input type="radio" name="job" value="queue" id="jb-queue"><span data-i="sk3">Navbatda turish</span></label>
+              <label><input type="radio" name="job" value="garden" id="jb-garden"><span data-i="sk4">Bogʻ ishlari</span></label>
+              <label><input type="radio" name="job" value="moving" id="jb-moving"><span data-i="sk5">Yuk koʻtarish</span></label>
+              <label><input type="radio" name="job" value="cleaning" id="jb-cleaning"><span data-i="sk6">Tozalash</span></label>
+              <label><input type="radio" name="job" value="other" id="jb-other"><span data-i="jbOther">Boshqa</span></label>
+            </div>
+            <span class="err" id="job-err" hidden data-i="eJob">Ish turini tanlang.</span>
+          </div>
+          <div class="fld">
+            <label for="task" data-i="fTask">Ishni qisqacha yozing</label>
+            <input id="task" maxlength="200" placeholder="Masalan: 2 eshikli shkafni yigʻish">
+            <span class="err" id="task-err" hidden data-i="eTask">Ishni qisqacha tavsiflang.</span>
+          </div>
+          <div class="fld">
+            <label for="price-in" data-i="fPrice">Taklif narxingiz</label>
+            <div class="money"><input id="price-in" inputmode="numeric" autocomplete="off" placeholder="120 000"><span data-i="somL">soʻm</span></div>
+            <div class="presets" id="price-presets">
+              <button type="button" data-v="50000">50 000</button>
+              <button type="button" data-v="100000">100 000</button>
+              <button type="button" data-v="150000">150 000</button>
+              <button type="button" data-v="250000">250 000</button>
+            </div>
+            <span class="err" id="price-err" hidden data-i="ePrice">Narxni 10 000 dan 10 000 000 soʻmgacha kiriting.</span>
+          </div>
+        </div>
         <div class="fld" id="skills-fld" hidden>
           <span style="font-size:14px;font-weight:600" data-i="fSkills">Qaysi ishlarni bajara olasiz?</span>
           <div class="skills">
@@ -1096,7 +1135,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
     paint(price); paint(rate);
   }
   price.addEventListener("input", calc); rate.addEventListener("input", calc); urgent.addEventListener("change", calc);
-  document.querySelectorAll(".presets button").forEach(b => b.addEventListener("click", () => { price.value = b.dataset.p; calc(); }));
+  document.querySelectorAll("#calc .presets button").forEach(b => b.addEventListener("click", () => { price.value = b.dataset.p; calc(); }));
 
   /* ---------- how-it-works stepper ---------- */
   const steps = Array.from(document.querySelectorAll(".step"));
@@ -1128,21 +1167,27 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
     clT:"Приём заявок временно закрыт",clP:"Сейчас новые заявки не принимаются. Скоро откроем снова. Вопросы можно отправить через форму ниже.",
     ctEyebrow:"Связь",ctTitle:"Вопрос, предложение или партнёрство?",ctLead:"Напишите нам, и команда свяжется с вами. Эта же форма для инвесторов и партнёров.",
     cfName:"Ваше имя",eName2:"Напишите ваше имя.",cfContact:"Телефон или Telegram",eContact:"Оставьте контакт для связи.",cfText:"Сообщение",eText:"Напишите текст сообщения.",
-    cfSubmit:"Отправить сообщение",cfOkT:"Сообщение отправлено",cfOkP:"Команда скоро свяжется с вами.",cfAgain:"Написать ещё",ft7:"Контакты",ft8:"Админ-панель"
+    cfSubmit:"Отправить сообщение",cfOkT:"Сообщение отправлено",cfOkP:"Команда скоро свяжется с вами.",cfAgain:"Написать ещё",ft7:"Контакты",ft8:"Админ-панель",
+    fJob:"Какая работа нужна?",jbOther:"Другое",eJob:"Выберите вид работы.",fTask:"Коротко опишите задачу",eTask:"Коротко опишите задачу.",
+    fPrice:"Ваша цена",somL:"сум",ePrice:"Укажите цену от 10 000 до 10 000 000 сум."
   });
   Object.assign(extra.uz, {
     errAuth:"Yuborib boʻlmadi: bu sahifada maʼlumot saqlash uchun claude.ai hisobingizga kirgan boʻlishingiz kerak.",
     errRights:"Bu sahifada maʼlumot yuborish huquqingiz yoʻq.",
     errQuota:"Baza toʻlib qolgan. Keyinroq urinib koʻring.",
     errNet:"Yuborilmadi. Internetni tekshirib, qayta urinib koʻring.",
-    phone:"Telefon", tg:"Telegram", copy:"Nusxa olish", copied:"Nusxa olindi"
+    phone:"Telefon", tg:"Telegram", copy:"Nusxa olish", copied:"Nusxa olindi",
+    taskPh:"Masalan: 2 eshikli shkafni yigʻish",
+    succC:"Buyurtmangiz qabul qilindi: {j}, {s} soʻm. Toshkentda ishga tushganimizda {p} raqamiga birinchi boʻlib xabar beramiz."
   });
   Object.assign(extra.ru, {
     errAuth:"Не удалось отправить: чтобы сохранять данные на этой странице, войдите в аккаунт claude.ai.",
     errRights:"У вас нет прав отправлять данные на этой странице.",
     errQuota:"База заполнена. Попробуйте позже.",
     errNet:"Не отправлено. Проверьте интернет и попробуйте ещё раз.",
-    phone:"Телефон", tg:"Telegram", copy:"Копировать", copied:"Скопировано"
+    phone:"Телефон", tg:"Telegram", copy:"Копировать", copied:"Скопировано",
+    taskPh:"Например: собрать двухдверный шкаф",
+    succC:"Заказ принят: {j}, {s} сум. Когда мы запустимся в Ташкенте, первыми сообщим на номер {p}."
   });
   const tx = k => extra[lang][k];
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1256,11 +1301,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
       refreshers.add(run); run(); const iv = setInterval(run, 20000);
       return () => { stop = true; clearInterval(iv); refreshers.delete(run); };
     }
-    const mapLead = r => ({ id:r.id, role:r.role, name:r.name, phone:r.phone, district:r.district, skills:r.skills || [], lang:r.lang, status:r.status, note:r.note || "", createdAt:Date.parse(r.created_at) });
+    const mapLead = r => ({ id:r.id, role:r.role, name:r.name, phone:r.phone, district:r.district, skills:r.skills || [], category:r.category, task:r.task || "", price:r.price, lang:r.lang, status:r.status, note:r.note || "", createdAt:Date.parse(r.created_at) });
     const mapMsg = r => ({ id:r.id, name:r.name, contact:r.contact, text:r.text, read:r.read, createdAt:Date.parse(r.created_at) });
     return {
       mode:"supabase",
-      async submitLead(l){ chk(await sb.from("leads").insert({ role:l.role, name:l.name, phone:l.phone, district:l.district, skills:l.skills, lang:l.lang })); },
+      async submitLead(l){ chk(await sb.from("leads").insert({ role:l.role, name:l.name, phone:l.phone, district:l.district, skills:l.skills, category:l.category, task:l.task, price:l.price, lang:l.lang })); },
       async submitMessage(m){ chk(await sb.from("messages").insert({ name:m.name, contact:m.contact, text:m.text })); },
       watchSettings(cb){ return poll(async () => { const r = await sb.from("settings").select("data").eq("id", 1).maybeSingle(); return r.data ? r.data.data : {}; }, cb, () => cb({})); },
       async session(){ return (await sb.auth.getSession()).data.session; },
@@ -1324,7 +1369,23 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
   function setRole(r){
     role = r; rc.setAttribute("aria-pressed", r === "client"); rw.setAttribute("aria-pressed", r === "worker");
     document.getElementById("skills-fld").hidden = r !== "worker";
+    document.getElementById("job-fld").hidden = r !== "client";
   }
+  const JOBS = ["furniture","repair","queue","garden","moving","cleaning","other"];
+  const jobName = k => { const i = SKILLS.indexOf(k); const d = lang === "ru" ? RU : UZ; return i >= 0 ? (d["sk" + (i + 1)] || k) : (k === "other" ? (d.jbOther || "Boshqa") : (k || "")); };
+  const taskI = document.getElementById("task"), priceI = document.getElementById("price-in");
+  const priceVal = () => parseInt(priceI.value.replace(/\D/g, ""), 10) || 0;
+  priceI.addEventListener("input", () => {
+    const d = priceI.value.replace(/\D/g, "").replace(/^0+/, "").slice(0, 8);
+    priceI.value = d ? fmt(+d) : "";
+  });
+  document.querySelectorAll("#price-presets button").forEach(b => b.addEventListener("click", () => {
+    priceI.value = fmt(+b.dataset.v); priceI.setAttribute("aria-invalid", "false"); document.getElementById("price-err").hidden = true;
+  }));
+  document.querySelectorAll('input[name="job"]').forEach(r => r.addEventListener("change", () => { document.getElementById("job-err").hidden = true; }));
+  onLangChange.push(() => { taskI.placeholder = tx("taskPh"); });
+  taskI.addEventListener("input", () => { if (taskI.value.trim().length >= 3){ taskI.setAttribute("aria-invalid", "false"); document.getElementById("task-err").hidden = true; } });
+  priceI.addEventListener("input", () => { const v = priceVal(); if (v >= 10000 && v <= 10000000){ priceI.setAttribute("aria-invalid", "false"); document.getElementById("price-err").hidden = true; } });
   rc.onclick = () => setRole("client"); rw.onclick = () => setRole("worker");
   document.getElementById("cta-worker").addEventListener("click", () => setRole("worker"));
   const form = document.getElementById("form"), nameI = document.getElementById("name"), phoneI = document.getElementById("phone");
@@ -1341,17 +1402,28 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
     const okN = n.length > 1, okP = digits.length === 9;
     nameI.setAttribute("aria-invalid", !okN); document.getElementById("name-err").hidden = okN;
     phoneI.setAttribute("aria-invalid", !okP); document.getElementById("phone-err").hidden = okP;
+    let job = null, task = "", pr = null, okJ = true, okT = true, okPr = true;
+    if (role === "client"){
+      const sel = document.querySelector('input[name="job"]:checked');
+      job = sel ? sel.value : null; task = taskI.value.trim().slice(0, 200); pr = priceVal();
+      okJ = !!job; okT = task.length >= 3; okPr = pr >= 10000 && pr <= 10000000;
+    }
+    document.getElementById("job-err").hidden = okJ;
+    taskI.setAttribute("aria-invalid", !okT); document.getElementById("task-err").hidden = okT;
+    priceI.setAttribute("aria-invalid", !okPr); document.getElementById("price-err").hidden = okPr;
     if (!okN){ nameI.focus(); return; } if (!okP){ phoneI.focus(); return; }
+    if (!okJ){ document.getElementById("jb-furniture").focus(); return; } if (!okT){ taskI.focus(); return; } if (!okPr){ priceI.focus(); return; }
     const d = document.getElementById("district").value;
     const skills = role === "worker" ? Array.from(document.querySelectorAll('input[name="skill"]:checked')).map(i => i.value) : [];
     const btn = document.getElementById("submit-btn"), errBox = document.getElementById("form-err");
     btn.disabled = true; btn.style.opacity = ".6"; errBox.hidden = true;
     try {
       const api = await apiReady;
-      await api.submitLead({ role, name:n.slice(0, 80), phone:phoneI.value, district:d, skills, lang });
+      await api.submitLead({ role, name:n.slice(0, 80), phone:phoneI.value, district:d, skills, category:job, task, price:pr, lang });
       const t = extra[lang];
       document.getElementById("succ-title").textContent = t.succT.replace("{n}", n);
-      document.getElementById("succ-text").textContent = (role === "worker" ? t.succW : t.succC).replace("{p}", phoneI.value).replace("{d}", d);
+      document.getElementById("succ-text").textContent = (role === "worker" ? t.succW : t.succC)
+        .replace("{p}", phoneI.value).replace("{d}", d).replace("{j}", jobName(job)).replace("{s}", pr ? fmt(pr) : "");
       document.getElementById("form-body").hidden = true;
       document.getElementById("success").hidden = false;
     } catch(err){
@@ -1407,7 +1479,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
       b_demo:"Supabase sozlanmagan, shuning uchun demo rejim ishlamoqda: maʼlumotlar faqat shu brauzerda saqlanadi. Kod boshidagi <code>CONFIG</code> ga SUPABASE_URL va SUPABASE_ANON_KEY yozing.",
       gLoad:"Yuklanmoqda…", gNoT:"Kirish yopiq", gNoP:"Admin panelni faqat sahifa egasi va muharrirlar koʻradi.", gOffP:"Bu koʻrinishda baza mavjud emas. claude.ai hisobingizga kirib, sahifani qayta oching.",
       lT:"Admin sifatida kirish", lP:"Supabase’da yaratilgan admin hisobi bilan kiring.", email:"Email", pw:"Parol", login:"Kirish", logout:"Chiqish", lErr:"Email yoki parol notoʻgʻri.", notAdmin:"Bu hisob admin emas.",
-      errSave:"Saqlab boʻlmadi. Qayta urinib koʻring.", errRights:"Bu amal uchun huquqingiz yoʻq.", errLoad:"Maʼlumotlarni yuklab boʻlmadi." },
+      errSave:"Saqlab boʻlmadi. Qayta urinib koʻring.", errRights:"Bu amal uchun huquqingiz yoʻq.", errLoad:"Maʼlumotlarni yuklab boʻlmadi.",
+      thJob:"Ish turi / koʻnikmalar", thPrice:"Narx", allCats:"Barcha ish turlari", kAvg:"oʻrtacha narx: {n}", kSum:"buyurtmalar summasi: {n}",
+      jobsT:"Buyurtmalar ish turi boʻyicha", jobsS:"soni · oʻrtacha narx", csvTask:"Tavsif", som:"soʻm" },
     ru:{ title:"Панель управления", back:"Вернуться на сайт", m_artifact:"База: Claude artifact", m_supabase:"База: Supabase", m_demo:"Демо · в этом браузере", m_offline:"База не подключена",
       tab_dash:"Обзор", tab_leads:"Заявки", tab_msgs:"Сообщения", tab_set:"Настройки",
       kTotal:"Всего заявок", kWorkers:"Исполнители", kClients:"Заказчики", kUnread:"Непрочитанные сообщения", kWeek:"за 7 дней: {n}", kGoal:"цель: {n}", kAll:"всего сообщений: {n}",
@@ -1428,7 +1502,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
       b_demo:"Supabase не настроен, поэтому работает демо-режим: данные хранятся только в этом браузере. Впишите SUPABASE_URL и SUPABASE_ANON_KEY в <code>CONFIG</code> в начале кода.",
       gLoad:"Загрузка…", gNoT:"Доступ закрыт", gNoP:"Админ-панель видят только владелец страницы и редакторы.", gOffP:"В этом режиме база недоступна. Войдите в claude.ai и откройте страницу заново.",
       lT:"Вход для администратора", lP:"Войдите с админ-аккаунтом, созданным в Supabase.", email:"Email", pw:"Пароль", login:"Войти", logout:"Выйти", lErr:"Неверный email или пароль.", notAdmin:"Этот аккаунт не администратор.",
-      errSave:"Не удалось сохранить. Попробуйте ещё раз.", errRights:"Нет прав на это действие.", errLoad:"Не удалось загрузить данные." }
+      errSave:"Не удалось сохранить. Попробуйте ещё раз.", errRights:"Нет прав на это действие.", errLoad:"Не удалось загрузить данные.",
+      thJob:"Работа / навыки", thPrice:"Цена", allCats:"Все виды работ", kAvg:"средняя цена: {n}", kSum:"сумма заказов: {n}",
+      jobsT:"Заказы по видам работ", jobsS:"кол-во · средняя цена", csvTask:"Описание", som:"сум" }
   };
   const t = (k, n) => { const s = (T[lang] || T.uz)[k] || T.uz[k] || k; return n == null ? s : s.replace("{n}", n); };
   const skillLabel = s => { const i = SKILLS.indexOf(s); return i < 0 ? s : ((lang === "ru" ? RU : UZ)["sk" + (i + 1)] || s); };
@@ -1436,7 +1512,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
   const fmtDate = ms => { const d = new Date(ms); return isNaN(d) ? "—" : `${two(d.getDate())}.${two(d.getMonth() + 1)}.${d.getFullYear()} ${two(d.getHours())}:${two(d.getMinutes())}`; };
   const admErr = e => (e && (e.code === "invalid_argument" || e.code === "42501")) ? t("errRights") : t("errSave");
 
-  const A = { api:null, ok:false, tab:"dash", leads:[], msgs:[], q:"", fRole:"", fSt:"", unsub:[], pending:false, loginErr:"" };
+  const money = n => fmt(n) + " " + t("som");
+  const A = { api:null, ok:false, tab:"dash", leads:[], msgs:[], q:"", fRole:"", fSt:"", fCat:"", unsub:[], pending:false, loginErr:"" };
   const root = document.getElementById("adm-root");
   const admEl = document.getElementById("admin");
 
@@ -1515,6 +1592,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
   function viewDash(){
     const L = A.leads, now = Date.now(), DAY = 864e5;
     const workers = L.filter(l => l.role === "worker").length, clients = L.length - workers;
+    const priced = L.filter(l => l.role !== "worker" && l.price > 0);
+    const sumAll = priced.reduce((a, l) => a + l.price, 0), avgAll = priced.length ? sumAll / priced.length : 0;
+    const jobRows = JOBS.map(k => { const xs = priced.filter(l => l.category === k); return [k, xs.length, xs.length ? xs.reduce((a, l) => a + l.price, 0) / xs.length : 0]; }).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]);
+    const jmax = Math.max(1, ...jobRows.map(r => r[1]));
     const week = L.filter(l => now - l.createdAt < 7 * DAY).length;
     const goal = Math.max(1, parseInt(settings.goal, 10) || 500);
     const pct = Math.min(100, Math.round(workers / goal * 100));
@@ -1539,7 +1620,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
       <div class="kpis">
         <div class="kpi-t"><small>${esc(t("kTotal"))}</small><b>${L.length}</b><em>${esc(t("kWeek", week))}</em></div>
         <div class="kpi-t"><small>${esc(t("kWorkers"))}</small><b>${workers}</b><div class="meter" title="${pct}%"><i style="width:${pct}%"></i></div><em>${esc(t("kGoal", goal))} · ${pct}%</em></div>
-        <div class="kpi-t"><small>${esc(t("kClients"))}</small><b>${clients}</b></div>
+        <div class="kpi-t"><small>${esc(t("kClients"))}</small><b>${clients}</b>${priced.length ? `<em>${esc(t("kAvg", money(avgAll)))}</em><em>${esc(t("kSum", money(sumAll)))}</em>` : ""}</div>
         <div class="kpi-t"><small>${esc(t("kUnread"))}</small><b>${unreadCount()}</b><em>${esc(t("kAll", A.msgs.length))}</em></div>
       </div>
       <div class="grid2">
@@ -1555,6 +1636,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
         <div class="panel"><div class="panel-h"><h3>${esc(t("stT"))}</h3></div>
           <div class="st-pills">${stc.map(([s, n]) => `<span class="st st-${s}" style="cursor:default">${esc(t("st_" + s))} · ${n}</span>`).join("")}</div>
         </div>
+      </div>
+      <div class="panel"><div class="panel-h"><h3>${esc(t("jobsT"))}</h3><span>${esc(t("jobsS"))}</span></div>
+        ${jobRows.length ? `<div class="hbars">${jobRows.map(([k, n, avg]) => `<div class="hbar wide"><span title="${esc(jobName(k))}">${esc(jobName(k))}</span><span class="t"><i style="width:${n / jmax * 100}%;background:var(--mint-deep)"></i></span><span style="font-family:var(--f-mono);text-align:right">${n}</span><span>${esc(money(avg))}</span></div>`).join("")}</div>` : `<p style="color:var(--muted)">${esc(t("nothing"))}</p>`}
       </div>`;
   }
 
@@ -1564,6 +1648,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
         <input type="search" id="lq" placeholder="${esc(t("search"))}" value="${esc(A.q)}" aria-label="${esc(t("search"))}">
         <select id="lrole" aria-label="${esc(t("thRole"))}"><option value="">${esc(t("allRoles"))}</option><option value="client" ${A.fRole === "client" ? "selected" : ""}>${esc(t("role_client"))}</option><option value="worker" ${A.fRole === "worker" ? "selected" : ""}>${esc(t("role_worker"))}</option></select>
         <select id="lst" aria-label="${esc(t("thSt"))}"><option value="">${esc(t("allSt"))}</option>${STATUSES.map(s => `<option value="${s}" ${A.fSt === s ? "selected" : ""}>${esc(t("st_" + s))}</option>`).join("")}</select>
+        <select id="lcat" aria-label="${esc(t("thJob"))}"><option value="">${esc(t("allCats"))}</option>${JOBS.map(k => `<option value="${k}" ${A.fCat === k ? "selected" : ""}>${esc(jobName(k))}</option>`).join("")}</select>
         <button class="btn btn-sm btn-line" data-act="export">${esc(t("export"))}</button>
       </div>
       <div id="lead-list"></div>`;
@@ -1572,7 +1657,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
     const q = A.q.trim().toLowerCase();
     return A.leads.filter(l =>
       (!A.fRole || l.role === A.fRole) && (!A.fSt || (l.status || "new") === A.fSt) &&
-      (!q || [l.name, l.phone, l.district, l.note].join(" ").toLowerCase().includes(q)));
+      (!A.fCat || l.category === A.fCat || (l.skills || []).includes(A.fCat)) &&
+      (!q || [l.name, l.phone, l.district, l.note, l.task].join(" ").toLowerCase().includes(q)));
   }
   function fillLeads(){
     const box = document.getElementById("lead-list"); if (!box) return;
@@ -1581,7 +1667,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
     const rows = filteredLeads();
     if (!rows.length){ box.innerHTML = `<div class="tbl-wrap"><div class="empty"><b>${esc(t("noMatch"))}</b></div></div>`; return; }
     box.innerHTML = `<p style="font-size:13px;color:var(--muted);margin:0 0 8px">${esc(t("shown", rows.length))}</p><div class="tbl-wrap"><table class="tbl"><thead><tr>
-      <th>${esc(t("thDate"))}</th><th>${esc(t("thName"))}</th><th>${esc(t("thPhone"))}</th><th>${esc(t("thRole"))}</th><th>${esc(t("thDist"))}</th><th>${esc(t("thSkills"))}</th><th>${esc(t("thSt"))}</th><th>${esc(t("thNote"))}</th><th></th>
+      <th>${esc(t("thDate"))}</th><th>${esc(t("thName"))}</th><th>${esc(t("thPhone"))}</th><th>${esc(t("thRole"))}</th><th>${esc(t("thDist"))}</th><th>${esc(t("thJob"))}</th><th>${esc(t("thPrice"))}</th><th>${esc(t("thSt"))}</th><th>${esc(t("thNote"))}</th><th></th>
     </tr></thead><tbody>${rows.map(l => {
       const st = STATUSES.includes(l.status) ? l.status : "new", r = l.role === "worker" ? "worker" : "client";
       return `<tr data-id="${esc(l.id)}">
@@ -1590,7 +1676,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
         <td class="mono" style="user-select:all">${esc(l.phone)}</td>
         <td><span class="role ${r}">${esc(t("role_" + r))}</span></td>
         <td>${esc(l.district)}</td>
-        <td class="sk">${(l.skills || []).map(s => esc(skillLabel(s))).join(", ") || "—"}</td>
+        <td class="sk">${r === "client" ? (l.category ? `<b style="color:var(--text)">${esc(jobName(l.category))}</b>${l.task ? `<br>${esc(l.task)}` : ""}` : "—") : ((l.skills || []).map(s => esc(skillLabel(s))).join(", ") || "—")}</td>
+        <td class="mono">${l.price > 0 ? esc(money(l.price)) : "—"}</td>
         <td><select class="st st-${st}" data-act="status" aria-label="${esc(t("thSt"))}">${STATUSES.map(s => `<option value="${s}" ${s === st ? "selected" : ""}>${esc(t("st_" + s))}</option>`).join("")}</select></td>
         <td><input class="note-in" data-act="note" value="${esc(l.note || "")}" placeholder="${esc(t("notePh"))}" aria-label="${esc(t("thNote"))}" maxlength="300"></td>
         <td><button class="icon-btn danger" data-act="del-lead">${esc(t("del"))}</button></td>
@@ -1599,8 +1686,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
   async function exportCsv(){
     const rows = filteredLeads();
     const q = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
-    const head = [t("thDate"), t("thName"), t("thPhone"), t("thRole"), t("thDist"), t("thSkills"), t("thSt"), t("thNote"), "Lang"];
-    const body = rows.map(l => [fmtDate(l.createdAt), l.name, l.phone, t("role_" + (l.role === "worker" ? "worker" : "client")), l.district, (l.skills || []).map(skillLabel).join("; "), t("st_" + (l.status || "new")), l.note || "", l.lang || ""]);
+    const head = [t("thDate"), t("thName"), t("thPhone"), t("thRole"), t("thDist"), t("thJob"), t("csvTask"), t("thPrice"), t("thSt"), t("thNote"), "Lang"];
+    const body = rows.map(l => [fmtDate(l.createdAt), l.name, l.phone, t("role_" + (l.role === "worker" ? "worker" : "client")), l.district, l.role === "worker" ? (l.skills || []).map(skillLabel).join("; ") : jobName(l.category), l.task || "", l.price > 0 ? l.price : "", t("st_" + (l.status || "new")), l.note || "", l.lang || ""]);
     const csv = "﻿" + [head, ...body].map(r => r.map(q).join(",")).join("\r\n");
     const d = new Date(), filename = `qolda-arizalar-${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}.csv`;
     const dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null;
@@ -1669,6 +1756,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:960px}
     const el = e.target;
     if (el.id === "lrole"){ A.fRole = el.value; fillLeads(); return; }
     if (el.id === "lst"){ A.fSt = el.value; fillLeads(); return; }
+    if (el.id === "lcat"){ A.fCat = el.value; fillLeads(); return; }
     const act = el.dataset && el.dataset.act; if (!act) return;
     const id = el.closest("[data-id]").dataset.id;
     try {
